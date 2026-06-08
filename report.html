@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SAYANJALI OSINT Report</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>body{font-family:Arial; margin:20px;} #map{height:400px; width:100%; margin-top:20px;}</style>
+</head>
+<body>
+    <h1>🔍 SAYANJALI OSINT Report</h1>
+    <p><b>Query:</b> 1600 Amphitheatre Parkway, Mountain View, CA (address)</p>
+    <p><b>Processing Time:</b> 0.76s</p>
+    <pre style="background:#f4f4f4; padding:10px;">{'query': '1600 Amphitheatre Parkway, Mountain View, CA', 'query_type': 'address', 'timestamp': '2026-06-09T01:46:23.850619', 'sources_queried': ['forward_geocoding'], 'errors': [], 'forward_geocode': {'query': '1600 Amphitheatre Parkway, Mountain View, CA', 'latitude': 37.4224858, 'longitude': -122.0855846, 'full_address': 'Google Building 41, 1600, Amphitheatre Parkway, Mountain View, Santa Clara County, California, 94043, United States', 'place_type': 'commercial', 'confidence': 0.8}, 'latitude': 37.4224858, 'longitude': -122.0855846, 'processing_time_seconds': 0.76, 'confidence_score': 0.8}</pre>
+    <div id='map'></div><script src='https://unpkg.com/leaflet@1.9.4/dist/leaflet.js'></script><script>var map=L.map('map').setView([37.4224858,-122.0855846], 13); L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map); L.marker([37.4224858,-122.0855846]).addTo(map);</script>
+</body>
+</html>
