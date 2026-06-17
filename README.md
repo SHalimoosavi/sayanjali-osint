@@ -1,304 +1,285 @@
 <div align="center">
 
-<img src="https://img.shields.io/badge/SAYANJALI-OSINT-00d4ff?style=for-the-badge&labelColor=0a0a0a&color=00d4ff" alt="SAYANJALI OSINT"/>
-
-# 🔍 SAYANJALI OSINT
-
-### *Transforming Public Data into Actionable Geolocation Intelligence*
-
-[![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?style=flat-square&logo=python&logoColor=white)](https://python.org)
-[![Platform](https://img.shields.io/badge/Platform-Termux%20%7C%20Linux-brightgreen?style=flat-square&logo=android&logoColor=white)](https://f-droid.org/packages/com.termux/)
-[![License](https://img.shields.io/badge/License-MIT-yellow?style=flat-square)](LICENSE)
-[![GitHub](https://img.shields.io/badge/GitHub-SHalimoosavi-181717?style=flat-square&logo=github&logoColor=white)](https://github.com/SHalimoosavi)
-[![Status](https://img.shields.io/badge/Status-Active-success?style=flat-square)]()
+<img src="https://capsule-render.vercel.app/api?type=waving&color=0:0d1117,50:1a1f2e,100:0f172a&height=200&section=header&text=SAYANJALI%20OSINT&fontSize=52&fontColor=38bdf8&fontAlignY=38&desc=Open-Source%20Intelligence%20Platform%20v2.0%20Sentinel&descColor=94a3b8&descAlignY=58&descSize=16" width="100%"/>
 
 <br/>
 
-> A powerful command-line geolocation intelligence aggregation tool — optimized for **Termux (Android)**.  
-> Unifies multiple free and open geolocation APIs to transform a single input into **comprehensive, investigation-ready intelligence**.
+[![Version](https://img.shields.io/badge/version-v2.0.0--Sentinel-38bdf8?style=for-the-badge&logo=git&logoColor=white)](https://github.com/SHalimoosavi/sayanjali-osint/releases)
+[![Status](https://img.shields.io/badge/status-Production%20Ready-22c55e?style=for-the-badge&logo=checkmarx&logoColor=white)](https://github.com/SHalimoosavi/sayanjali-osint)
+[![Python](https://img.shields.io/badge/Python-3.10%2B-facc15?style=for-the-badge&logo=python&logoColor=black)](https://python.org)
+[![License](https://img.shields.io/badge/License-MIT-a855f7?style=for-the-badge&logo=open-source-initiative&logoColor=white)](LICENSE)
+[![Platform](https://img.shields.io/badge/Platform-Linux%20%7C%20Termux-e2e8f0?style=for-the-badge&logo=linux&logoColor=black)](https://github.com/SHalimoosavi/sayanjali-osint)
+[![Author](https://img.shields.io/badge/Author-Syed%20Ali%20Hasan%20Moosavi-f97316?style=for-the-badge&logo=github&logoColor=white)](https://github.com/SHalimoosavi)
+
+<br/>
+
+> **Intelligence. Visibility. Correlation.**
+> 
+> *The intelligence gap between a security analyst and an adversary is closed by the tools they wield.*
+
+<br/>
+
+[📖 Documentation](#-documentation) · [🚀 Quick Start](#-quick-start) · [⚡ Features](#-features) · [🛠 Architecture](#-architecture) · [👤 Author](#-author)
 
 </div>
 
 ---
 
-## 📋 Table of Contents
+## 🎯 The Problem We're Solving
 
-- [Overview](#-overview)
-- [Features](#-features)
-- [Prerequisites](#-prerequisites)
-- [Installation](#-installation)
-- [Usage](#-usage)
-- [Output Formats](#-output-formats)
-- [Configuration](#-configuration)
-- [Supported Intelligence Sources](#-supported-intelligence-sources)
-- [Troubleshooting](#-troubleshooting)
-- [Security & Privacy](#-security--privacy)
-- [Roadmap](#-roadmap)
-- [Author](#-author)
-- [Contributing](#-contributing)
-- [License](#-license)
+Security analysts and investigators face a fragmented intelligence landscape. When a threat appears — a suspicious IP, an unknown domain, a malicious actor — the workflow looks like this:
 
----
-
-## 🌐 Overview
-
-**SAYANJALI OSINT** is a lightweight yet powerful OSINT geolocation framework designed for **Android Termux** environments. It aggregates intelligence from multiple free geolocation sources and presents results in investigator-friendly formats.
-
-### Supported Target Types
-
-| Type | Example |
-|------|---------|
-| 🌐 IP Addresses | `8.8.8.8` |
-| 🔗 Domains | `google.com` |
-| 📍 GPS Coordinates | `48.8584, 2.2945` |
-| 🏠 Physical Addresses | `Eiffel Tower, Paris` |
-| 🗺️ Locations & Landmarks | Any named place |
-
----
-
-## ✨ Features
-
-<table>
-<tr>
-<td width="50%">
-
-### 🔎 Geolocation Intelligence
-- IP Geolocation
-- Domain Resolution
-- Reverse Geocoding
-- Forward Geocoding
-- Nearby Points of Interest Search
-
-### ⚡ Performance
-- Async Concurrent Requests
-- Fast API Aggregation
-- Local GeoLite2 Database Support
-- Intelligent Caching
-
-</td>
-<td width="50%">
-
-### 📊 Reporting
-- Terminal Tables
-- JSON Reports
-- CSV Exports
-- HTML Reports
-- Interactive Leaflet Maps
-
-### 🖥️ Platform Support
-- Android (Termux) ✅
-- Linux ✅
-- Ubuntu / Debian ✅
-- Kali Linux ✅
-
-</td>
-</tr>
-</table>
-
----
-
-## 📦 Prerequisites
-
-Before installation, ensure you have:
-
-| Requirement | Version |
-|-------------|---------|
-| Android | 5.0+ |
-| Termux | F-Droid version (recommended) |
-| Python | 3.10+ |
-| Git | Latest |
-| Curl | Latest |
-| Storage | ~50MB free |
-
-> ⚠️ **Important:** The Play Store version of Termux is no longer maintained.  
-> Download Termux from F-Droid: [https://f-droid.org/packages/com.termux/](https://f-droid.org/packages/com.termux/)
-
----
-
-## 🚀 Installation
-
-### Step 1 — Update Packages
-
-```bash
-pkg update && pkg upgrade -y
+```
+VirusTotal → Manual Copy → Shodan → Manual Copy → AbuseIPDB → Manual Copy → Spreadsheet → Report
 ```
 
-### Step 2 — Install Requirements
+**This is broken.** Investigators waste hours correlating data across 6–10 separate platforms, manually copy-pasting between tabs, and still miss cross-source correlations that only emerge when intelligence is unified.
 
-```bash
-pkg install -y python git curl
+**SAYANJALI OSINT v2.0 Sentinel solves this:**
+
+| Old Workflow | SAYANJALI OSINT |
+|---|---|
+| 6+ browser tabs | Single CLI command |
+| Manual correlation | Automated threat scoring |
+| No unified report | PDF + HTML + JSON export |
+| Hours per investigation | Minutes per investigation |
+| Scattered IOC data | Unified intelligence database |
+
+---
+
+## 🛡️ What Is SAYANJALI OSINT?
+
+**SAYANJALI OSINT** is a production-grade Open Source Intelligence platform that aggregates threat intelligence, infrastructure data, domain analysis, and reputation scoring from multiple authoritative sources into a single, unified investigation framework.
+
+Built for:
+- 🔵 **Security Operations Centers (SOC)** — rapid IOC triage and enrichment
+- 🔴 **Penetration Testers** — passive recon without leaving active fingerprints
+- 🟡 **Digital Investigators** — multi-source intelligence correlation
+- 🟢 **Threat Analysts** — executive-grade reporting with evidence trails
+- 🟣 **Bug Bounty Hunters** — efficient target reconnaissance
+
+---
+
+## ⚡ Features
+
+### 🌐 IP & Network Intelligence
+```
+✓ GeoIP Lookup              ✓ ASN Intelligence
+✓ Reverse DNS Analysis      ✓ IP Reputation Scoring
+✓ Threat Feed Correlation   ✓ Infrastructure Mapping
 ```
 
-### Step 3 — Clone Repository
+### 🌍 Domain Intelligence
+```
+✓ WHOIS Analysis            ✓ DNS Enumeration
+✓ Reverse DNS Resolution    ✓ Domain Reputation
+✓ Passive Subdomain Enum    ✓ Infrastructure Discovery
+```
+
+### 🕵️ Multi-Source Threat Intelligence
+
+| Integration | Capabilities |
+|---|---|
+| **VirusTotal** | Reputation scoring · Malicious/suspicious detection counts |
+| **Shodan** | Open ports · Service banners · OS fingerprinting |
+| **AbuseIPDB** | Abuse confidence score · Historical reports · ISP data |
+| **AlienVault OTX** | Community pulses · Indicator reputation · Threat feeds |
+
+### 🔍 Passive Reconnaissance Engine
+```
+✓ Zero active fingerprint — purely passive enumeration
+✓ Automated IOC extraction: IPs, Domains, URLs, Emails
+✓ Subdomain discovery via DNS-based passive methods
+✓ Cross-source indicator correlation
+```
+
+### 👤 Username & Identity Intelligence
+Cross-platform footprint analysis across:
+`GitHub` · `GitLab` · `Reddit` · `DockerHub` · `HackerOne` · `Medium` · `Keybase`
+
+### 🧠 Threat Correlation Engine
+The platform's core intelligence layer synthesizes all gathered data into:
+- **Risk Score** — quantified threat rating
+- **Threat Verdict** — BENIGN / SUSPICIOUS / MALICIOUS / UNKNOWN
+- **Confidence Rating** — evidence quality assessment
+- **Executive Findings** — human-readable intelligence summary
+
+### 📊 Multi-Format Reporting
+
+```
+┌─────────────────────────────────────────────────────────┐
+│  CLI Dashboard  │  HTML Report  │  PDF Executive  │  JSON │
+│  Rich terminal  │  Interactive  │  Professional   │  API  │
+│  Real-time      │  shareable    │  court-ready    │  export│
+└─────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 📦 Installation
+
+### Prerequisites
+
+| Requirement | Version | Check |
+|---|---|---|
+| Python | 3.10+ | `python3 --version` |
+| pip | Latest | `pip --version` |
+| Git | Any | `git --version` |
+
+### Linux / Kali / Ubuntu
 
 ```bash
+# Clone the repository
 git clone https://github.com/SHalimoosavi/sayanjali-osint.git
 cd sayanjali-osint
-```
 
-### Step 4 — Install Dependencies
-
-```bash
-pip install -r requirements.txt --no-cache-dir
-```
-
-### Step 5 — Download GeoLite2 Database
-
-```bash
-mkdir -p data
-
-curl -L https://github.com/P3TERPRETER/GeoLite2-City/raw/main/GeoLite2-City.mmdb \
-  -o data/GeoLite2-City.mmdb
-```
-
-### Step 6 — Verify Installation
-
-```bash
-python3 main.py --query 8.8.8.8
-```
-
----
-
-## 🛠️ Usage
-
-### Help Menu
-
-```bash
-python3 main.py --help
-```
-
-### IP Geolocation
-
-```bash
-python3 main.py --query 8.8.8.8
-```
-
-### Domain Resolution
-
-```bash
-python3 main.py --query google.com
-```
-
-### Reverse Geocoding
-
-```bash
-python3 main.py --query "48.8584,2.2945"
-```
-
-### Forward Geocoding
-
-```bash
-python3 main.py --query "Eiffel Tower, Paris"
-```
-
-### Batch Processing
-
-```bash
-python3 main.py --batch targets.txt
-```
-
----
-
-## 📄 Output Formats
-
-| Format | Command |
-|--------|---------|
-| 📋 Table (default) | `python3 main.py --query google.com` |
-| 🗂️ JSON | `python3 main.py --query google.com --format json` |
-| 📊 CSV | `python3 main.py --query google.com --format csv` |
-| 🌐 HTML Report | `python3 main.py --query google.com --format html` |
-
----
-
-## ⚙️ Configuration
-
-Create or modify the `.env` file in the project root:
-
-```env
-# API Rate Limits
-NOMINATIM_RATE_LIMIT=1
-OVERPASS_RATE_LIMIT=0.5
-
-# Logging
-LOG_LEVEL=INFO
-
-# Default Output Format
-DEFAULT_FORMAT=table
-
-# Cache Settings
-ENABLE_CACHE=true
-CACHE_EXPIRY_HOURS=24
-```
-
----
-
-## 🔗 Supported Intelligence Sources
-
-| Source | Purpose |
-|--------|---------|
-| [MaxMind GeoLite2](https://dev.maxmind.com/geoip/geolite2-free-geolocation-data) | Offline IP Geolocation |
-| [OpenStreetMap Nominatim](https://nominatim.org/) | Geocoding (Forward & Reverse) |
-| [Overpass API](https://overpass-api.de/) | Nearby Locations & POI |
-| DNS Resolver | Domain-to-IP Resolution |
-| [Leaflet.js](https://leafletjs.com/) | Interactive Map Rendering |
-
----
-
-## 🐛 Troubleshooting
-
-### `ModuleNotFoundError`
-
-```bash
-pip install --upgrade pip
+# Install dependencies
 pip install -r requirements.txt
+
+# Run initial setup
+python main.py --setup
 ```
 
-### GeoLite2 Database Missing
+### Termux (Android)
 
 ```bash
-mkdir -p data
+# Update Termux packages
+pkg update && pkg upgrade -y
+pkg install python git -y
 
-curl -L https://github.com/P3TERPRETER/GeoLite2-City/raw/main/GeoLite2-City.mmdb \
-  -o data/GeoLite2-City.mmdb
+# Clone and install
+git clone https://github.com/SHalimoosavi/sayanjali-osint.git
+cd sayanjali-osint
+
+pip install -r requirements.txt
+python main.py --setup
 ```
 
-### API Rate Limit Errors (`HTTP 429`)
+### API Keys Configuration
 
-If you encounter `429 Too Many Requests`:
+SAYANJALI OSINT integrates with threat intelligence APIs. After running `--setup`, configure your keys in `config.py`:
 
-- Wait before retrying requests
-- Enable caching in `.env` (`ENABLE_CACHE=true`)
-- Increase request intervals via rate limit settings
+```python
+VIRUSTOTAL_API_KEY    = "your_key_here"   # Free: virustotal.com
+SHODAN_API_KEY        = "your_key_here"   # Free tier: shodan.io
+ABUSEIPDB_API_KEY     = "your_key_here"   # Free: abuseipdb.com
+OTX_API_KEY           = "your_key_here"   # Free: otx.alienvault.com
+```
 
----
-
-## 🔒 Security & Privacy
-
-SAYANJALI OSINT is designed with privacy in mind:
-
-- ✅ Does **not** collect or transmit user data
-- ✅ Uses only **public OSINT sources**
-- ✅ Supports **local offline** IP geolocation via GeoLite2
-- ✅ Minimizes external API calls through intelligent **caching**
-
-> **Users remain solely responsible for legal and ethical usage in their jurisdiction.**
+> 💡 **All API keys have free tiers.** The platform functions with partial keys — more keys = richer intelligence.
 
 ---
 
-## 🗺️ Roadmap
+## 🚀 Quick Start
 
-Planned features for upcoming releases:
+```bash
+# Investigate a domain
+python main.py -q google.com
 
-- [ ] Shodan Integration
-- [ ] WHOIS Intelligence
-- [ ] ASN Lookup
-- [ ] Email Intelligence
-- [ ] Phone Number Intelligence
-- [ ] Telegram Username Intelligence
-- [ ] Social Media Discovery
-- [ ] PDF Report Generation
-- [ ] AI Investigation Assistant
-- [ ] Multi-Language Support
+# Investigate an IP address
+python main.py -q 8.8.8.8
+
+# Batch investigation (multiple targets)
+python main.py --batch targets.txt
+
+# Export as JSON (for automation/integrations)
+python main.py -q github.com -f json
+
+# Generate interactive HTML dashboard
+python main.py -q github.com -f html -o report.html
+
+# Generate executive PDF report
+python main.py -q github.com -f pdf
+
+# System health check
+python main.py --health
+
+# Cache statistics
+python main.py --stats
+
+# Clean expired cache
+python main.py --cleanup-cache
+```
+
+---
+
+## 🏗️ Architecture
+
+```
+sayanjali-osint/
+│
+├── apis/                  ← External API clients (VT, Shodan, AbuseIPDB, OTX)
+├── cache/                 ← SQLite local cache engine
+├── data/                  ← Intelligence data models & storage
+├── formatters/            ← Output renderers (CLI, HTML, PDF, JSON)
+├── processors/            ← Intelligence correlation & scoring engine
+├── utils/                 ← Shared utilities & helpers
+│
+├── main.py                ← CLI entrypoint
+├── config.py              ← API keys & platform configuration
+├── validators.py          ← Input validation (IP, domain, URL)
+├── models.py              ← Pydantic data models
+│
+├── requirements.txt
+├── VERSION
+└── README.md
+```
+
+### Performance & Caching
+
+```
+First run  → Fetches live data from all APIs → Stores in SQLite cache
+Repeat run → Serves from local cache         → Zero API calls, instant results
+```
+
+Batch investigations run targets concurrently, drastically reducing total investigation time.
+
+---
+
+## 📈 Roadmap
+
+- [ ] **v2.1** — Telegram & Discord alert integrations
+- [ ] **v2.2** — Dark web mention monitoring hooks
+- [ ] **v2.3** — MITRE ATT&CK framework tagging
+- [ ] **v3.0** — Web UI dashboard (FastAPI + React)
+- [ ] **v3.1** — Team collaboration & shared investigations
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome from the security community.
+
+```bash
+# Fork the repo, then:
+git checkout -b feature/your-feature-name
+git commit -m "feat: describe your change"
+git push origin feature/your-feature-name
+# → Open a Pull Request
+```
+
+**Areas we welcome contributions:**
+- New API integrations (e.g. GreyNoise, SecurityTrails, Censys)
+- Additional output formatters
+- Performance improvements to the correlation engine
+- Termux compatibility patches
+- Documentation & usage examples
+
+---
+
+## 🏢 About SAYANJALI NEXUS PRIVATE LIMITED
+
+SAYANJALI OSINT is one of several open-source and commercial projects under **SAYANJALI NEXUS PRIVATE LIMITED**, a technology company operating across AI, SaaS, cybersecurity, and blockchain verticals.
+
+**Other projects by the same author:**
+
+| Project | Description | Stack |
+|---|---|---|
+| [**SYJ ONE**](https://github.com/SHalimoosavi/syj-one) | All-in-one productivity + dev + security platform for Termux | Python |
+| [**NexusRank AI**](https://github.com/SHalimoosavi) | Enterprise SEO/GEO SaaS with multi-provider AI integration | FastAPI + React |
+| [**termux-pro**](https://github.com/SHalimoosavi/termux-pro) | Termux Zero → Pro: Android Dev + Hacking + AI Lab | HTML/Shell |
+| [**moosavi**](https://github.com/SHalimoosavi/moosavi) | Personal portfolio — Three.js blockchain universe | HTML/JS |
+| [**podcaster_crew**](https://github.com/SHalimoosavi/podcaster_crew) | Multi-agent AI podcast production system | Python |
 
 ---
 
@@ -306,35 +287,23 @@ Planned features for upcoming releases:
 
 <div align="center">
 
-**Syed Ali Hasan Moosavi**  
-*Founder & Managing Director*  
-**SAYANJALI NEXUS PRIVATE LIMITED**
+<img src="https://avatars.githubusercontent.com/u/228988824?v=4" width="100" style="border-radius:50%"/>
+
+### Syed Ali Hasan Moosavi
+
+**Founder & Managing Director — SAYANJALI NEXUS PRIVATE LIMITED**
+
+*Automation engineer working with N8N, APIs, GitHub Actions, AI agents, and Web3 operations.*
+*Building systems that prioritize reliability, observability, and operational clarity.*
 
 [![GitHub](https://img.shields.io/badge/GitHub-SHalimoosavi-181717?style=for-the-badge&logo=github)](https://github.com/SHalimoosavi)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-0077b5?style=for-the-badge&logo=linkedin)](https://www.linkedin.com/in/syed-ali-hasan-moosavi-237734378/)
+[![Portfolio](https://img.shields.io/badge/Portfolio-Visit-f97316?style=for-the-badge&logo=firefox&logoColor=white)](https://shalimoosavi.github.io/moosavi/)
+[![X](https://img.shields.io/badge/X-@SHAliMoosavi-000000?style=for-the-badge&logo=x)](https://x.com/SHAliMoosavi)
+
+📍 Hyderabad, India · 🕐 UTC +05:30
 
 </div>
-
-### Core Projects
-
-| Project | Description |
-|---------|-------------|
-| 🔍 SAYANJALI OSINT | Geolocation Intelligence Framework |
-| 🪙 SYJ Token | Blockchain Token Ecosystem |
-| 🤖 NexusRank AI | Enterprise SEO / GEO AI Platform |
-| 🏥 BBG Nexus AI | AI-Powered Business Intelligence |
-| 🏨 MA Hospital SaaS | Healthcare Management Platform |
-
----
-
-## 🤝 Contributing
-
-Contributions are welcome and appreciated!
-
-1. **Fork** the repository
-2. **Create** your feature branch (`git checkout -b feature/AmazingFeature`)
-3. **Commit** your changes (`git commit -m 'Add AmazingFeature'`)
-4. **Push** to the branch (`git push origin feature/AmazingFeature`)
-5. **Open** a Pull Request
 
 ---
 
@@ -342,32 +311,27 @@ Contributions are welcome and appreciated!
 
 ```
 MIT License
-
-Copyright (c) 2026 Syed Ali Hasan Moosavi
+Copyright (c) 2026 SAYANJALI NEXUS PRIVATE LIMITED
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files to deal in the Software
-without restriction, including without limitation the rights to use, copy,
-modify, merge, publish, distribute, sublicense, and/or sell copies of the
-Software.
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction...
 ```
 
----
-
-## ⭐ Support
-
-If SAYANJALI OSINT has been useful to you:
-
-- ⭐ **Star** the repository
-- 🍴 **Fork** and build upon it
-- 📢 **Share** with the OSINT community
-- 🐛 **Report** issues and bugs via GitHub Issues
+Full license text: [LICENSE](LICENSE)
 
 ---
 
 <div align="center">
 
-**SAYANJALI OSINT**  
-*Powered by [SAYANJALI NEXUS PRIVATE LIMITED](https://github.com/SHalimoosavi)*
+<img src="https://capsule-render.vercel.app/api?type=waving&color=0:0f172a,50:1a1f2e,100:0d1117&height=100&section=footer" width="100%"/>
+
+**SAYANJALI OSINT v2.0.0 Sentinel**
+
+*Intelligence. Visibility. Correlation.*
+
+Powered by **[SAYANJALI NEXUS PRIVATE LIMITED](https://shalimoosavi.github.io/moosavi/)**
+
+⭐ If this tool helped your investigation, star the repo and share it with your team.
 
 </div>
