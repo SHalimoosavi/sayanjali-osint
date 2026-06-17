@@ -1,6 +1,8 @@
 import time
 from datetime import datetime
 
+from cache.cache_manager import CacheManager
+
 from validators import detect_query_type, resolve_domain_to_ip
 
 from apis.ai_summary import generate_ai_summary
@@ -12,8 +14,17 @@ from apis.whois_lookup import lookup_whois
 from apis.dns_lookup import get_dns_records
 from apis.reverse_dns import reverse_dns_lookup
 from apis.asn_lookup import lookup_asn
+
 from apis.virustotal import lookup_virustotal
 from apis.shodan_lookup import lookup_shodan
+from apis.abuseipdb import lookup_abuseipdb
+from apis.otx_lookup import lookup_otx
+
+from apis.subdomain_enum import enumerate_subdomains
+from apis.email_intelligence import analyze_email_intelligence
+from apis.username_intelligence import username_lookup
+
+from utils.ioc_extractor import extract_iocs
 
 
 async def run_investigation(
@@ -25,6 +36,14 @@ async def run_investigation(
     start_time = time.time()
 
     q_type, norm_query = detect_query_type(query)
+
+    cache = CacheManager()
+
+    cached = cache.get(query)
+
+    if cached:
+        cached["cache_status"] = "HIT"
+        return cached
 
     report = {
         "query": query,
@@ -38,6 +57,10 @@ async def run_investigation(
     errors = []
 
     try:
+
+        # =====================================
+        # IP INVESTIGATION
+        # =====================================
 
         if q_type == "ip":
 
@@ -62,6 +85,15 @@ async def run_investigation(
                 norm_query
             )
 
+            report["abuseipdb"] = lookup_abuseipdb(
+                norm_query
+            )
+
+            report["otx"] = lookup_otx(
+                norm_query,
+                "ip"
+            )
+
             report["latitude"] = ip_data.get(
                 "latitude"
             )
@@ -75,8 +107,14 @@ async def run_investigation(
                 "reverse_dns",
                 "asn_lookup",
                 "virustotal",
-                "shodan"
+                "shodan",
+                "abuseipdb",
+                "otx"
             ])
+
+        # =====================================
+        # DOMAIN INVESTIGATION
+        # =====================================
 
         elif q_type == "domain":
 
@@ -98,6 +136,10 @@ async def run_investigation(
                 norm_query
             )
 
+            report["subdomains"] = enumerate_subdomains(
+                norm_query
+            )
+
             report["reverse_dns"] = reverse_dns_lookup(
                 ip
             )
@@ -115,7 +157,18 @@ async def run_investigation(
                 ip
             )
 
-            ip_data = await lookup_ip(ip)
+            report["abuseipdb"] = lookup_abuseipdb(
+                ip
+            )
+
+            report["otx"] = lookup_otx(
+                norm_query,
+                "domain"
+            )
+
+            ip_data = await lookup_ip(
+                ip
+            )
 
             report["ip_geolocation"] = ip_data
 
@@ -130,12 +183,19 @@ async def run_investigation(
             sources.extend([
                 "whois",
                 "dns",
+                "subdomain_enum",
                 "reverse_dns",
                 "asn_lookup",
                 "virustotal",
                 "shodan",
+                "abuseipdb",
+                "otx",
                 "ip_geolocation"
             ])
+
+        # =====================================
+        # COORDINATES
+        # =====================================
 
         elif q_type == "coordinates":
 
@@ -155,6 +215,10 @@ async def run_investigation(
             sources.append(
                 "reverse_geocoding"
             )
+
+        # =====================================
+        # ADDRESS
+        # =====================================
 
         elif q_type == "address":
 
@@ -176,9 +240,11 @@ async def run_investigation(
                 "forward_geocoding"
             )
 
-        if nearby_type and report.get(
-            "latitude"
-        ):
+        # =====================================
+        # NEARBY SEARCH
+        # =====================================
+
+        if nearby_type and report.get("latitude"):
 
             report["nearby_places"] = await search_places(
                 report["latitude"],
@@ -191,15 +257,94 @@ async def run_investigation(
                 "overpass_poi"
             )
 
+        # =====================================
+        # IOC EXTRACTION
+        # =====================================
+
+        ioc_text = ""
+
+        for key in [
+            "query",
+            "domain_info",
+            "whois",
+            "dns_records",
+            "subdomains",
+            "reverse_dns",
+            "shodan",
+            "abuseipdb",
+            "otx"
+        ]:
+
+            if report.get(key):
+                ioc_text += str(report[key]) + " "
+
+        report["ioc_summary"] = extract_iocs(
+            ioc_text
+        )
+
+        # =====================================
+        # EMAIL INTELLIGENCE
+        # =====================================
+
+        report["email_intelligence"] = (
+            analyze_email_intelligence(
+                report
+            )
+        )
+
+        sources.append(
+            "email_intelligence"
+        )
+
+        # =====================================
+        # USERNAME INTELLIGENCE
+        # =====================================
+
+        username_target = None
+
+        if q_type == "domain":
+
+            username_target = (
+                norm_query.split(".")[0]
+            )
+
+        elif q_type == "address":
+
+            username_target = (
+                norm_query.replace(
+                    " ",
+                    ""
+                )
+            )
+
+        if username_target:
+
+            report["username_intelligence"] = (
+                username_lookup(
+                    username_target
+                )
+            )
+
+            sources.append(
+                "username_intelligence"
+            )
+
+        # =====================================
+        # THREAT CORRELATION
+        # =====================================
+
         report["ai_summary"] = generate_ai_summary(
             report
         )
 
     except Exception as e:
 
-        errors.append(str(e))
+        errors.append(
+            str(e)
+        )
 
     report["sources_queried"] = sources
+
     report["errors"] = errors
 
     report["processing_time_seconds"] = round(
@@ -209,6 +354,13 @@ async def run_investigation(
 
     report["confidence_score"] = (
         0.8 if not errors else 0.5
+    )
+
+    report["cache_status"] = "MISS"
+
+    cache.set(
+        query,
+        report
     )
 
     return report

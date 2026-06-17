@@ -3,12 +3,22 @@ import click
 import json
 import os
 
+from rich.console import Console
+from rich.table import Table
+from rich.panel import Panel
+
 from processors.aggregator import run_investigation
 
 from formatters.cli_formatter import format_cli
 from formatters.json_formatter import format_json
 from formatters.html_formatter import format_html
 from formatters.pdf_formatter import generate_pdf
+
+from cache.cache_manager import CacheManager
+from utils.health_check import run_health_check
+
+
+console = Console()
 
 
 @click.command()
@@ -59,7 +69,22 @@ from formatters.pdf_formatter import generate_pdf
 )
 @click.option(
     "--batch",
-    help="Batch file"
+    help="Batch file containing targets"
+)
+@click.option(
+    "--health",
+    is_flag=True,
+    help="Run system health check"
+)
+@click.option(
+    "--stats",
+    is_flag=True,
+    help="Show cache statistics"
+)
+@click.option(
+    "--cleanup-cache",
+    is_flag=True,
+    help="Remove expired cache entries"
 )
 def main(
     query,
@@ -69,14 +94,95 @@ def main(
     out_format,
     output,
     setup,
-    batch
+    batch,
+    health,
+    stats,
+    cleanup_cache
 ):
+
+    # ==================================================
+    # HEALTH CHECK
+    # ==================================================
+
+    if health:
+
+        result = run_health_check()
+
+        console.print(
+            Panel(
+                "SAYANJALI OSINT Health Check",
+                title="System Diagnostics"
+            )
+        )
+
+        for name, status in result["checks"].items():
+
+            if status:
+                print(f"[OK] {name}")
+            else:
+                print(f"[FAIL] {name}")
+
+        print()
+
+        if result["healthy"]:
+            print("SYSTEM STATUS: HEALTHY")
+        else:
+            print("SYSTEM STATUS: DEGRADED")
+
+        return
+
+    # ==================================================
+    # CACHE STATS
+    # ==================================================
+
+    if stats:
+
+        cache = CacheManager()
+
+        console.print(
+            Panel(
+                "SAYANJALI OSINT Cache Statistics",
+                title="Statistics"
+            )
+        )
+
+        print(
+            f"Cache Entries : {cache.count_entries()}"
+        )
+
+        print(
+            f"Database Size : {cache.database_size()} KB"
+        )
+
+        print(
+            "Status         : Production Release"
+        )
+
+        return
+
+    # ==================================================
+    # CACHE CLEANUP
+    # ==================================================
+
+    if cleanup_cache:
+
+        cache = CacheManager()
+
+        removed = cache.cleanup()
+
+        print(
+            f"Expired cache removed: {removed}"
+        )
+
+        return
+
+    # ==================================================
+    # SETUP
+    # ==================================================
 
     if setup:
 
-        print(
-            "📦 Setting up SAYANJALI OSINT..."
-        )
+        print("📦 Setting up SAYANJALI OSINT...")
 
         os.makedirs(
             "data",
@@ -92,29 +198,30 @@ def main(
             "GeoLite2-City.mmdb"
         )
 
-        print(
-            "⬇️ Downloading GeoIP database..."
-        )
+        print("⬇️ Downloading GeoIP database...")
 
         urllib.request.urlretrieve(
             url,
             "data/GeoLite2-City.mmdb"
         )
 
-        print(
-            "✅ Setup complete"
-        )
+        print("✅ Setup complete")
 
         return
+
+    # ==================================================
+    # BATCH INTELLIGENCE
+    # ==================================================
 
     if batch:
 
         with open(
             batch,
-            "r"
+            "r",
+            encoding="utf-8"
         ) as f:
 
-            queries = [
+            targets = [
                 line.strip()
                 for line in f
                 if line.strip()
@@ -122,26 +229,153 @@ def main(
 
         results = []
 
-        for q in queries:
+        completed = 0
+        failed = 0
+        total_risk = 0
 
-            result = asyncio.run(
-                run_investigation(
-                    q,
-                    nearby,
-                    radius
-                )
-            )
-
-            results.append(result)
-
-        print(
-            json.dumps(
-                results,
-                indent=2
+        console.print(
+            Panel(
+                f"Targets Loaded: {len(targets)}",
+                title="Batch Intelligence"
             )
         )
 
+        for target in targets:
+
+            try:
+
+                report = asyncio.run(
+                    run_investigation(
+                        target,
+                        nearby,
+                        radius
+                    )
+                )
+
+                results.append(report)
+
+                completed += 1
+
+                risk = (
+                    report
+                    .get("ai_summary", {})
+                    .get("risk_score", 0)
+                )
+
+                total_risk += risk
+
+            except Exception as e:
+
+                failed += 1
+
+                results.append(
+                    {
+                        "query": target,
+                        "error": str(e)
+                    }
+                )
+
+        table = Table(
+            title="Batch Intelligence Summary"
+        )
+
+        table.add_column(
+            "Target",
+            style="cyan"
+        )
+
+        table.add_column(
+            "Verdict",
+            style="green"
+        )
+
+        table.add_column("Risk")
+        table.add_column("Cache")
+
+        for report in results:
+
+            if report.get("error"):
+
+                table.add_row(
+                    report["query"],
+                    "FAILED",
+                    "-",
+                    "-"
+                )
+
+                continue
+
+            ai = report.get(
+                "ai_summary",
+                {}
+            )
+
+            table.add_row(
+                report.get(
+                    "query",
+                    "N/A"
+                ),
+                str(
+                    ai.get(
+                        "verdict",
+                        "Unknown"
+                    )
+                ),
+                str(
+                    ai.get(
+                        "risk_score",
+                        0
+                    )
+                ),
+                report.get(
+                    "cache_status",
+                    "N/A"
+                )
+            )
+
+        console.print(table)
+
+        avg_risk = 0
+
+        if completed:
+
+            avg_risk = round(
+                total_risk / completed,
+                2
+            )
+
+        console.print(
+            Panel(
+                f"Completed : {completed}\n"
+                f"Failed : {failed}\n"
+                f"Average Risk : {avg_risk}",
+                title="Batch Statistics"
+            )
+        )
+
+        if output:
+
+            with open(
+                output,
+                "w",
+                encoding="utf-8"
+            ) as f:
+
+                json.dump(
+                    results,
+                    f,
+                    indent=2
+                )
+
+            print(
+                f"✅ Batch report saved to {output}"
+            )
+
         return
+
+    # ==================================================
+    # SINGLE TARGET
+    # ==================================================
 
     if not query:
 
@@ -159,7 +393,9 @@ def main(
         )
     )
 
-    # TABLE OUTPUT
+    # ==================================================
+    # TABLE
+    # ==================================================
 
     if out_format == "table":
 
@@ -167,7 +403,9 @@ def main(
 
         return
 
-    # PDF OUTPUT
+    # ==================================================
+    # PDF
+    # ==================================================
 
     if out_format == "pdf":
 
@@ -188,7 +426,9 @@ def main(
 
         return
 
-    # JSON OUTPUT
+    # ==================================================
+    # JSON
+    # ==================================================
 
     if out_format == "json":
 
@@ -196,7 +436,9 @@ def main(
             report
         )
 
-    # HTML OUTPUT
+    # ==================================================
+    # HTML
+    # ==================================================
 
     elif out_format == "html":
 
@@ -204,7 +446,9 @@ def main(
             report
         )
 
-    # CSV OUTPUT
+    # ==================================================
+    # CSV
+    # ==================================================
 
     else:
 

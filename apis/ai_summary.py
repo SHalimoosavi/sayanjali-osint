@@ -6,6 +6,9 @@ def generate_ai_summary(report: dict) -> dict:
     whois = report.get("whois", {})
     asn = report.get("asn_info", {})
     vt = report.get("virustotal", {})
+    abuse = report.get("abuseipdb", {})
+    otx = report.get("otx", {})
+    shodan = report.get("shodan", {})
 
     registrar = str(
         whois.get("registrar", "")
@@ -33,6 +36,8 @@ def generate_ai_summary(report: dict) -> dict:
         "cloudflare"
     ]
 
+    # Trusted organization
+
     for company in trusted_orgs:
 
         if company in organization:
@@ -45,6 +50,8 @@ def generate_ai_summary(report: dict) -> dict:
 
             break
 
+    # Trusted registrar
+
     for reg in trusted_registrars:
 
         if reg in registrar:
@@ -56,6 +63,8 @@ def generate_ai_summary(report: dict) -> dict:
             )
 
             break
+
+    # DNS Intelligence
 
     dns_records = report.get(
         "dns_records",
@@ -78,7 +87,11 @@ def generate_ai_summary(report: dict) -> dict:
             "Name servers configured"
         )
 
-    if vt:
+    # ======================
+    # VIRUSTOTAL
+    # ======================
+
+    if vt and not vt.get("error"):
 
         malicious = vt.get(
             "malicious",
@@ -100,7 +113,7 @@ def generate_ai_summary(report: dict) -> dict:
             risk_score += 40
 
             findings.append(
-                f"{malicious} malicious detections"
+                f"{malicious} VirusTotal malicious detections"
             )
 
         if suspicious > 0:
@@ -108,7 +121,7 @@ def generate_ai_summary(report: dict) -> dict:
             risk_score += 20
 
             findings.append(
-                f"{suspicious} suspicious detections"
+                f"{suspicious} VirusTotal suspicious detections"
             )
 
         if reputation > 100:
@@ -119,6 +132,107 @@ def generate_ai_summary(report: dict) -> dict:
                 "High VirusTotal reputation"
             )
 
+    # ======================
+    # ABUSEIPDB
+    # ======================
+
+    if abuse and not abuse.get("error"):
+
+        abuse_score = abuse.get(
+            "abuse_score",
+            0
+        )
+
+        reports = abuse.get(
+            "total_reports",
+            0
+        )
+
+        if abuse_score >= 75:
+
+            risk_score += 40
+
+            findings.append(
+                f"AbuseIPDB high confidence abuse ({abuse_score})"
+            )
+
+        elif abuse_score >= 25:
+
+            risk_score += 20
+
+            findings.append(
+                f"AbuseIPDB moderate abuse score ({abuse_score})"
+            )
+
+        elif abuse_score == 0:
+
+            risk_score -= 10
+
+            findings.append(
+                "No AbuseIPDB abuse confidence"
+            )
+
+        if reports > 100:
+
+            findings.append(
+                f"{reports} AbuseIPDB reports"
+            )
+
+    # ======================
+    # OTX
+    # ======================
+
+    if otx and not otx.get("error"):
+
+        pulse_count = otx.get(
+            "pulse_count",
+            0
+        )
+
+        if pulse_count > 0:
+
+            risk_score += min(
+                pulse_count,
+                20
+            )
+
+            findings.append(
+                f"Referenced in {pulse_count} OTX pulses"
+            )
+
+    # ======================
+    # SHODAN
+    # ======================
+
+    if shodan and not shodan.get("error"):
+
+        ports = shodan.get(
+            "ports",
+            []
+        )
+
+        port_count = len(ports)
+
+        if port_count > 20:
+
+            risk_score += 20
+
+            findings.append(
+                f"Large attack surface ({port_count} ports)"
+            )
+
+        elif port_count > 5:
+
+            risk_score += 10
+
+            findings.append(
+                f"Multiple exposed services ({port_count} ports)"
+            )
+
+    # ======================
+    # NORMALIZE
+    # ======================
+
     risk_score = max(
         0,
         min(
@@ -126,6 +240,10 @@ def generate_ai_summary(report: dict) -> dict:
             risk_score
         )
     )
+
+    # ======================
+    # VERDICT
+    # ======================
 
     if risk_score <= 20:
 
@@ -135,12 +253,25 @@ def generate_ai_summary(report: dict) -> dict:
 
         verdict = "Medium Risk"
 
-    else:
+    elif risk_score <= 75:
 
         verdict = "High Risk"
+
+    else:
+
+        verdict = "Critical Risk"
+
+    confidence = round(
+        min(
+            100,
+            50 + len(findings) * 5
+        ),
+        0
+    )
 
     return {
         "risk_score": risk_score,
         "verdict": verdict,
+        "confidence": confidence,
         "findings": findings
     }

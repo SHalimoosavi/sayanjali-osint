@@ -1,0 +1,115 @@
+{
+  "query": "8.8.8.8",
+  "query_type": "ip",
+  "timestamp": "2026-06-17T05:50:14.321729",
+  "sources_queried": [
+    "ip_geolocation",
+    "reverse_dns",
+    "asn_lookup",
+    "virustotal",
+    "shodan",
+    "abuseipdb",
+    "otx",
+    "email_intelligence"
+  ],
+  "errors": [],
+  "ip_geolocation": {
+    "ip": "8.8.8.8",
+    "country": "United States",
+    "country_code": "US",
+    "city": "Ashburn",
+    "latitude": 39.03,
+    "longitude": -77.5,
+    "isp": "Google Public DNS",
+    "confidence": 0.8,
+    "region": "Virginia",
+    "timezone": "America/New_York"
+  },
+  "reverse_dns": {
+    "hostname": "dns.google",
+    "aliases": [],
+    "addresses": [
+      "8.8.8.8"
+    ]
+  },
+  "asn_info": {
+    "asn": "AS15169 Google LLC",
+    "organization": "Google Public DNS",
+    "network": "8.8.8.8",
+    "country": "United States"
+  },
+  "virustotal": {
+    "reputation": 544,
+    "harmless": 55,
+    "malicious": 0,
+    "suspicious": 0,
+    "undetected": 36
+  },
+  "shodan": {
+    "ip": "8.8.8.8",
+    "organization": "Google LLC",
+    "os": null,
+    "country": "United States",
+    "hostnames": [
+      "dns.google"
+    ],
+    "ports": [
+      443,
+      53
+    ],
+    "last_update": "2026-06-16T21:08:44.433527"
+  },
+  "abuseipdb": {
+    "ip": "8.8.8.8",
+    "abuse_score": 0,
+    "country": "US",
+    "isp": "Google LLC",
+    "domain": "google.com",
+    "usage_type": "Content Delivery Network",
+    "total_reports": 134,
+    "last_reported": "2026-06-16T09:13:04+00:00"
+  },
+  "otx": {
+    "indicator": "8.8.8.8",
+    "indicator_type": "ip",
+    "reputation": 0,
+    "pulse_count": 0,
+    "country": "US",
+    "asn": "AS15169 google llc",
+    "city": null
+  },
+  "latitude": 39.03,
+  "longitude": -77.5,
+  "ioc_summary": {
+    "ips": [
+      "8.8.8.8"
+    ],
+    "domains": [
+      "dns.google",
+      "google.com"
+    ],
+    "emails": [],
+    "urls": []
+  },
+  "email_intelligence": {
+    "emails_found": 0,
+    "emails": [],
+    "email_domains": [],
+    "spf_detected": false,
+    "dmarc_detected": false
+  },
+  "ai_summary": {
+    "risk_score": 0,
+    "verdict": "Low Risk",
+    "confidence": 70,
+    "findings": [
+      "Trusted organization detected: google public dns",
+      "High VirusTotal reputation",
+      "No AbuseIPDB abuse confidence",
+      "134 AbuseIPDB reports"
+    ]
+  },
+  "processing_time_seconds": 6.16,
+  "confidence_score": 0.8,
+  "cache_status": "MISS"
+}

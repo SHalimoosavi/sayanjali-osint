@@ -1,23 +1,67 @@
 from rich.console import Console
-from rich.table import Table
 from rich.panel import Panel
+from rich.table import Table
 
 
 def format_cli(report: dict):
 
     console = Console()
 
+    # ==================================================
+    # HEADER
+    # ==================================================
+
     console.print(
         Panel(
             f"[bold cyan]SAYANJALI OSINT Report[/bold cyan]\n"
-            f"Query: [yellow]{report['query']}[/yellow] "
-            f"({report['query_type']})\n"
-            f"Time: {report['processing_time_seconds']}s",
+            f"Query: [yellow]{report.get('query')}[/yellow]\n"
+            f"Type: [green]{report.get('query_type')}[/green]\n"
+            f"Time: {report.get('processing_time_seconds')}s",
             expand=False
         )
     )
 
+    # ==================================================
+    # CACHE STATUS
+    # ==================================================
+
+    if report.get("cache_status"):
+
+        console.print(
+            Panel(
+                f"[bold]Cache Status:[/bold] {report.get('cache_status')}",
+                title="Cache",
+                border_style="blue",
+                expand=False
+            )
+        )
+
+    # ==================================================
+    # EXECUTIVE SUMMARY
+    # ==================================================
+
+    if report.get("ai_summary"):
+
+        ai = report["ai_summary"]
+
+        findings = "\n".join(
+            f"• {x}" for x in ai.get("findings", [])
+        )
+
+        console.print(
+            Panel(
+                f"[bold]Risk Score:[/bold] {ai.get('risk_score')}\n"
+                f"[bold]Verdict:[/bold] {ai.get('verdict')}\n"
+                f"[bold]Confidence:[/bold] {ai.get('confidence', 'N/A')}\n\n"
+                f"{findings}",
+                title="Executive Summary",
+                border_style="green"
+            )
+        )
+
+    # ==================================================
     # DOMAIN INFO
+    # ==================================================
 
     if report.get("domain_info"):
 
@@ -25,371 +69,247 @@ def format_cli(report: dict):
 
         table = Table(title="Domain Information")
 
-        table.add_column("Field", style="cyan")
-        table.add_column("Value", style="green")
+        table.add_column("Field")
+        table.add_column("Value")
 
         table.add_row(
             "Domain",
-            domain.get("domain", "N/A")
+            str(domain.get("domain"))
         )
 
         table.add_row(
             "Primary IP",
-            domain.get("primary_ip", "N/A")
+            str(domain.get("primary_ip"))
         )
 
         console.print(table)
 
-    # WHOIS
-
-    if report.get("whois"):
-
-        whois = report["whois"]
-
-        table = Table(title="WHOIS Information")
-
-        table.add_column("Field", style="cyan")
-        table.add_column("Value", style="green")
-
-        table.add_row(
-            "Registrar",
-            str(whois.get("registrar", "N/A"))
-        )
-
-        table.add_row(
-            "Creation Date",
-            str(whois.get("creation_date", "N/A"))
-        )
-
-        table.add_row(
-            "Expiration Date",
-            str(whois.get("expiration_date", "N/A"))
-        )
-
-        table.add_row(
-            "Updated Date",
-            str(whois.get("updated_date", "N/A"))
-        )
-
-        console.print(table)
-
-    # REVERSE DNS
-
-    if report.get("reverse_dns"):
-
-        rdns = report["reverse_dns"]
-
-        if not rdns.get("error"):
-
-            table = Table(title="Reverse DNS")
-
-            table.add_column("Field", style="cyan")
-            table.add_column("Value", style="green")
-
-            table.add_row(
-                "Hostname",
-                rdns.get("hostname", "N/A")
-            )
-
-            table.add_row(
-                "Addresses",
-                ", ".join(
-                    rdns.get("addresses", [])
-                )
-            )
-
-            console.print(table)
-
+    # ==================================================
     # ASN
+    # ==================================================
 
     if report.get("asn_info"):
 
         asn = report["asn_info"]
 
-        if not asn.get("error"):
+        table = Table(title="ASN Intelligence")
 
-            table = Table(title="ASN Intelligence")
+        table.add_column("Field")
+        table.add_column("Value")
 
-            table.add_column("Field", style="cyan")
-            table.add_column("Value", style="green")
+        table.add_row(
+            "ASN",
+            str(asn.get("asn"))
+        )
 
-            table.add_row(
-                "ASN",
-                asn.get("asn", "N/A")
+        table.add_row(
+            "Organization",
+            str(asn.get("organization"))
+        )
+
+        table.add_row(
+            "Network",
+            str(asn.get("network"))
+        )
+
+        table.add_row(
+            "Country",
+            str(asn.get("country"))
+        )
+
+        console.print(table)
+
+    # ==================================================
+    # SHODAN
+    # ==================================================
+
+    if report.get("shodan"):
+
+        shodan = report["shodan"]
+
+        table = Table(title="Shodan Intelligence")
+
+        table.add_column("Field")
+        table.add_column("Value")
+
+        table.add_row(
+            "Organization",
+            str(shodan.get("organization"))
+        )
+
+        table.add_row(
+            "Country",
+            str(shodan.get("country"))
+        )
+
+        table.add_row(
+            "Operating System",
+            str(shodan.get("os"))
+        )
+
+        table.add_row(
+            "Hostnames",
+            ", ".join(
+                shodan.get("hostnames", [])
             )
+        )
 
-            table.add_row(
-                "Organization",
-                asn.get("organization", "N/A")
+        table.add_row(
+            "Ports",
+            ", ".join(
+                map(str, shodan.get("ports", []))
             )
+        )
 
-            table.add_row(
-                "Network",
-                asn.get("network", "N/A")
-            )
+        table.add_row(
+            "Last Update",
+            str(shodan.get("last_update"))
+        )
 
-            table.add_row(
-                "Country",
-                asn.get("country", "N/A")
-            )
+        console.print(table)
 
-            console.print(table)
-
+    # ==================================================
     # VIRUSTOTAL
+    # ==================================================
 
     if report.get("virustotal"):
 
         vt = report["virustotal"]
 
-        malicious = int(
-            vt.get("malicious", 0)
-        )
+        table = Table(title="VirusTotal Intelligence")
 
-        suspicious = int(
-            vt.get("suspicious", 0)
-        )
-
-        if malicious > 0:
-            verdict = "MALICIOUS"
-        elif suspicious > 0:
-            verdict = "SUSPICIOUS"
-        else:
-            verdict = "CLEAN"
-
-        table = Table(
-            title="VirusTotal Intelligence"
-        )
-
-        table.add_column(
-            "Field",
-            style="cyan"
-        )
-
-        table.add_column(
-            "Value",
-            style="green"
-        )
+        table.add_column("Field")
+        table.add_column("Value")
 
         table.add_row(
             "Reputation",
-            str(vt.get("reputation", "N/A"))
+            str(vt.get("reputation"))
         )
 
         table.add_row(
             "Harmless",
-            str(vt.get("harmless", "N/A"))
+            str(vt.get("harmless"))
         )
 
         table.add_row(
             "Malicious",
-            str(vt.get("malicious", "N/A"))
+            str(vt.get("malicious"))
         )
 
         table.add_row(
             "Suspicious",
-            str(vt.get("suspicious", "N/A"))
+            str(vt.get("suspicious"))
         )
 
         table.add_row(
             "Undetected",
-            str(vt.get("undetected", "N/A"))
-        )
-
-        table.add_row(
-            "Threat Verdict",
-            verdict
+            str(vt.get("undetected"))
         )
 
         console.print(table)
 
-    # AI SUMMARY
+    # ==================================================
+    # ABUSEIPDB
+    # ==================================================
 
-    if report.get("ai_summary"):
+    if report.get("abuseipdb"):
 
-        ai = report["ai_summary"]
+        abuse = report["abuseipdb"]
 
-        table = Table(
-            title="AI Threat Summary"
-        )
+        table = Table(title="AbuseIPDB Intelligence")
 
-        table.add_column(
-            "Field",
-            style="cyan"
-        )
-
-        table.add_column(
-            "Value",
-            style="green"
-        )
+        table.add_column("Field")
+        table.add_column("Value")
 
         table.add_row(
-            "Risk Score",
-            str(ai.get("risk_score", "N/A"))
-        )
-
-        table.add_row(
-            "Verdict",
-            ai.get("verdict", "N/A")
-        )
-
-        findings = "\n".join(
-            ai.get("findings", [])[:5]
-        )
-
-        table.add_row(
-            "Findings",
-            findings if findings else "None"
-        )
-
-        console.print(table)
-
-    # DNS
-
-    if report.get("dns_records"):
-
-        dns = report["dns_records"]
-
-        table = Table(title="DNS Records")
-
-        table.add_column(
-            "Type",
-            style="cyan"
-        )
-
-        table.add_column(
-            "Records",
-            style="green"
-        )
-
-        for record_type in [
-            "A",
-            "AAAA",
-            "MX",
-            "TXT",
-            "NS"
-        ]:
-
-            values = dns.get(
-                record_type,
-                []
-            )
-
-            if values:
-
-                table.add_row(
-                    record_type,
-                    "\n".join(values[:5])
-                )
-
-        console.print(table)
-
-    # GEOLOCATION
-
-    if report.get("ip_geolocation"):
-
-        ip = report["ip_geolocation"]
-
-        table = Table(
-            title="IP Geolocation"
-        )
-
-        table.add_column(
-            "Field",
-            style="cyan"
-        )
-
-        table.add_column(
-            "Value",
-            style="green"
-        )
-
-        table.add_row(
-            "IP",
-            ip.get("ip", "N/A")
-        )
-
-        table.add_row(
-            "Location",
-            f"{ip.get('city', 'N/A')}, "
-            f"{ip.get('region', 'N/A')}, "
-            f"{ip.get('country', 'N/A')}"
-        )
-
-        table.add_row(
-            "Coordinates",
-            f"{ip.get('latitude')}, "
-            f"{ip.get('longitude')}"
+            "Abuse Score",
+            str(abuse.get("abuse_score"))
         )
 
         table.add_row(
             "ISP",
-            ip.get("isp", "N/A")
+            str(abuse.get("isp"))
+        )
+
+        table.add_row(
+            "Domain",
+            str(abuse.get("domain"))
+        )
+
+        table.add_row(
+            "Usage Type",
+            str(abuse.get("usage_type"))
+        )
+
+        table.add_row(
+            "Total Reports",
+            str(abuse.get("total_reports"))
+        )
+
+        table.add_row(
+            "Last Reported",
+            str(abuse.get("last_reported"))
         )
 
         console.print(table)
 
-    # REVERSE GEOCODE
+    # ==================================================
+    # OTX
+    # ==================================================
 
-    if report.get("reverse_geocode"):
+    if report.get("otx"):
 
-        rev = report["reverse_geocode"]
+        otx = report["otx"]
 
-        if isinstance(rev, dict):
+        table = Table(title="AlienVault OTX Intelligence")
 
-            address = (
-                rev.get("full_address")
-                or "N/A"
-            )
+        table.add_column("Field")
+        table.add_column("Value")
 
-            console.print(
-                Panel(
-                    f"[bold]Address:[/bold] {address}",
-                    title="Reverse Geocode",
-                    expand=False
-                )
-            )
-
-    # NEARBY PLACES
-
-    if report.get("nearby_places"):
-
-        poi = report["nearby_places"]
-
-        table = Table(
-            title=f"Nearby {poi.get('place_type', 'Places')}"
+        table.add_row(
+            "Indicator",
+            str(otx.get("indicator"))
         )
 
-        table.add_column(
-            "Name",
-            style="cyan"
+        table.add_row(
+            "Type",
+            str(otx.get("indicator_type"))
         )
 
-        table.add_column(
-            "Distance",
-            style="green"
+        table.add_row(
+            "Reputation",
+            str(otx.get("reputation"))
         )
 
-        for place in poi.get(
-            "results",
-            []
-        )[:10]:
+        table.add_row(
+            "Pulse Count",
+            str(otx.get("pulse_count"))
+        )
 
-            table.add_row(
-                place.get(
-                    "name",
-                    "Unknown"
-                ),
-                f"{place.get('distance_meters', 'N/A')}m"
-            )
+        table.add_row(
+            "ASN",
+            str(otx.get("asn"))
+        )
+
+        table.add_row(
+            "Country",
+            str(otx.get("country"))
+        )
 
         console.print(table)
 
+    # ==================================================
     # ERRORS
+    # ==================================================
 
     if report.get("errors"):
 
         if len(report["errors"]) > 0:
 
             console.print(
-                f"[red]{', '.join(report['errors'])}[/red]"
+                Panel(
+                    "\n".join(report["errors"]),
+                    title="Errors",
+                    border_style="red"
+                )
             )

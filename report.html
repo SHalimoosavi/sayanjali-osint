@@ -1,15 +1,153 @@
+
 <!DOCTYPE html>
 <html>
 <head>
-    <title>SAYANJALI OSINT Report</title>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <style>body{font-family:Arial; margin:20px;} #map{height:400px; width:100%; margin-top:20px;}</style>
+
+<meta charset="utf-8">
+
+<title>SAYANJALI OSINT Dashboard</title>
+
+<style>
+
+body {
+    font-family: Arial, sans-serif;
+    background: #0f172a;
+    color: white;
+    padding: 20px;
+}
+
+h1 {
+    text-align: center;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit,minmax(320px,1fr));
+    gap: 20px;
+}
+
+.card {
+    background: #1e293b;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.4);
+}
+
+.card h2 {
+    margin-top: 0;
+    color: #38bdf8;
+}
+
+pre {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+</style>
+
 </head>
+
 <body>
-    <h1>🔍 SAYANJALI OSINT Report</h1>
-    <p><b>Query:</b> 1600 Amphitheatre Parkway, Mountain View, CA (address)</p>
-    <p><b>Processing Time:</b> 0.76s</p>
-    <pre style="background:#f4f4f4; padding:10px;">{'query': '1600 Amphitheatre Parkway, Mountain View, CA', 'query_type': 'address', 'timestamp': '2026-06-09T01:46:23.850619', 'sources_queried': ['forward_geocoding'], 'errors': [], 'forward_geocode': {'query': '1600 Amphitheatre Parkway, Mountain View, CA', 'latitude': 37.4224858, 'longitude': -122.0855846, 'full_address': 'Google Building 41, 1600, Amphitheatre Parkway, Mountain View, Santa Clara County, California, 94043, United States', 'place_type': 'commercial', 'confidence': 0.8}, 'latitude': 37.4224858, 'longitude': -122.0855846, 'processing_time_seconds': 0.76, 'confidence_score': 0.8}</pre>
-    <div id='map'></div><script src='https://unpkg.com/leaflet@1.9.4/dist/leaflet.js'></script><script>var map=L.map('map').setView([37.4224858,-122.0855846], 13); L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map); L.marker([37.4224858,-122.0855846]).addTo(map);</script>
+
+<h1>SAYANJALI OSINT Dashboard</h1>
+
+<div class="grid">
+
+<div class="card">
+<h2>Executive Summary</h2>
+<p><b>Risk Score:</b> 0</p>
+<p><b>Verdict:</b> Low Risk</p>
+<p><b>Confidence:</b> 80</p>
+
+<ul>
+<li>Trusted organization detected: google llc</li><li>Trusted registrar detected: markmonitor, inc.</li><li>Email infrastructure detected</li><li>Name servers configured</li><li>High VirusTotal reputation</li><li>No AbuseIPDB abuse confidence</li>
+</ul>
+
+</div>
+
+<div class="card">
+<h2>ASN Intelligence</h2>
+<pre>{
+  "asn": "AS15169 Google LLC",
+  "organization": "Google LLC",
+  "network": "142.251.43.142",
+  "country": "Thailand"
+}</pre>
+</div>
+
+<div class="card">
+<h2>VirusTotal Intelligence</h2>
+<pre>{
+  "reputation": 707,
+  "harmless": 61,
+  "malicious": 0,
+  "suspicious": 0,
+  "undetected": 30
+}</pre>
+</div>
+
+<div class="card">
+<h2>Shodan Intelligence</h2>
+<pre>{
+  "ip": "142.251.43.142",
+  "organization": "Google LLC",
+  "os": null,
+  "country": "Singapore",
+  "hostnames": [
+    "bkk03s01-in-f14.1e100.net",
+    "lcmaaa-aq-in-f14.1e100.net"
+  ],
+  "ports": [
+    80,
+    443
+  ],
+  "last_update": "2026-06-06T05:30:04.344049"
+}</pre>
+</div>
+
+<div class="card">
+<h2>AbuseIPDB Intelligence</h2>
+<pre>{
+  "ip": "142.251.43.142",
+  "abuse_score": 0,
+  "country": "US",
+  "isp": "Google LLC",
+  "domain": "google.com",
+  "usage_type": "Data Center/Web Hosting/Transit",
+  "total_reports": 0,
+  "last_reported": "2025-05-14T18:30:20+00:00"
+}</pre>
+</div>
+
+<div class="card">
+<h2>AlienVault OTX</h2>
+<pre>{
+  "indicator": "google.com",
+  "indicator_type": "domain",
+  "reputation": 0,
+  "pulse_count": 0,
+  "country": null,
+  "asn": null,
+  "city": null
+}</pre>
+</div>
+
+<div class="card">
+<h2>Metadata</h2>
+
+<p><b>Query:</b> google.com</p>
+
+<p><b>Type:</b> domain</p>
+
+<p><b>Processing Time:</b>
+8.74s</p>
+
+<p><b>Cache:</b>
+HIT</p>
+
+</div>
+
+</div>
+
 </body>
 </html>
