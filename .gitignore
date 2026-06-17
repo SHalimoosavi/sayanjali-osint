@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.pyc
+
+# Cache
+.cache/
+
+# Temporary Reports
+test.json
+nearby.json
+
+# Termux
+.termux/
+
+# Environment
+.env
+
+# OS Files
+.DS_Store
