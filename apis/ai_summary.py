@@ -1,7 +1,60 @@
 def generate_ai_summary(report: dict) -> dict:
 
-    risk_score = 50
     findings = []
+
+    query_type = report.get(
+        "query_type",
+        ""
+    )
+
+    # =====================================
+    # GEOLOCATION / ADDRESS INVESTIGATIONS
+    # =====================================
+
+    if query_type in [
+        "coordinates",
+        "address"
+    ]:
+
+        nearby = report.get(
+            "nearby_places",
+            {}
+        )
+
+        total_places = nearby.get(
+            "total_results",
+            len(
+                nearby.get(
+                    "results",
+                    []
+                )
+            )
+        )
+
+        if total_places > 0:
+
+            findings.append(
+                f"{total_places} nearby locations discovered"
+            )
+
+        else:
+
+            findings.append(
+                "No nearby locations discovered"
+            )
+
+        return {
+            "risk_score": 0,
+            "verdict": "Informational",
+            "confidence": 90,
+            "findings": findings
+        }
+
+    # =====================================
+    # THREAT INVESTIGATIONS
+    # =====================================
+
+    risk_score = 50
 
     whois = report.get("whois", {})
     asn = report.get("asn_info", {})
@@ -11,11 +64,17 @@ def generate_ai_summary(report: dict) -> dict:
     shodan = report.get("shodan", {})
 
     registrar = str(
-        whois.get("registrar", "")
+        whois.get(
+            "registrar",
+            ""
+        )
     ).lower()
 
     organization = str(
-        asn.get("organization", "")
+        asn.get(
+            "organization",
+            ""
+        )
     ).lower()
 
     trusted_orgs = [
@@ -36,8 +95,6 @@ def generate_ai_summary(report: dict) -> dict:
         "cloudflare"
     ]
 
-    # Trusted organization
-
     for company in trusted_orgs:
 
         if company in organization:
@@ -50,8 +107,6 @@ def generate_ai_summary(report: dict) -> dict:
 
             break
 
-    # Trusted registrar
-
     for reg in trusted_registrars:
 
         if reg in registrar:
@@ -63,8 +118,6 @@ def generate_ai_summary(report: dict) -> dict:
             )
 
             break
-
-    # DNS Intelligence
 
     dns_records = report.get(
         "dns_records",
@@ -87,9 +140,9 @@ def generate_ai_summary(report: dict) -> dict:
             "Name servers configured"
         )
 
-    # ======================
+    # =====================================
     # VIRUSTOTAL
-    # ======================
+    # =====================================
 
     if vt and not vt.get("error"):
 
@@ -132,9 +185,9 @@ def generate_ai_summary(report: dict) -> dict:
                 "High VirusTotal reputation"
             )
 
-    # ======================
+    # =====================================
     # ABUSEIPDB
-    # ======================
+    # =====================================
 
     if abuse and not abuse.get("error"):
 
@@ -178,9 +231,9 @@ def generate_ai_summary(report: dict) -> dict:
                 f"{reports} AbuseIPDB reports"
             )
 
-    # ======================
+    # =====================================
     # OTX
-    # ======================
+    # =====================================
 
     if otx and not otx.get("error"):
 
@@ -200,9 +253,9 @@ def generate_ai_summary(report: dict) -> dict:
                 f"Referenced in {pulse_count} OTX pulses"
             )
 
-    # ======================
+    # =====================================
     # SHODAN
-    # ======================
+    # =====================================
 
     if shodan and not shodan.get("error"):
 
@@ -211,7 +264,9 @@ def generate_ai_summary(report: dict) -> dict:
             []
         )
 
-        port_count = len(ports)
+        port_count = len(
+            ports
+        )
 
         if port_count > 20:
 
@@ -229,10 +284,6 @@ def generate_ai_summary(report: dict) -> dict:
                 f"Multiple exposed services ({port_count} ports)"
             )
 
-    # ======================
-    # NORMALIZE
-    # ======================
-
     risk_score = max(
         0,
         min(
@@ -240,10 +291,6 @@ def generate_ai_summary(report: dict) -> dict:
             risk_score
         )
     )
-
-    # ======================
-    # VERDICT
-    # ======================
 
     if risk_score <= 20:
 
