@@ -6,10 +6,9 @@
 
 [![Version](https://img.shields.io/badge/version-v2.1.0--Sentinel%20Intelligence-38bdf8?style=for-the-badge&logo=git&logoColor=white)](https://github.com/SHalimoosavi/sayanjali-osint/releases)
 [![Status](https://img.shields.io/badge/status-Stable%20Release-22c55e?style=for-the-badge&logo=checkmarx&logoColor=white)](https://github.com/SHalimoosavi/sayanjali-osint)
-[![Readiness](https://img.shields.io/badge/production%20readiness-90%25-facc15?style=for-the-badge&logo=target&logoColor=black)](https://github.com/SHalimoosavi/sayanjali-osint)
-[![Python](https://img.shields.io/badge/Python-3.10%2B-3776ab?style=for-the-badge&logo=python&logoColor=white)](https://python.org)
+[![Python](https://img.shields.io/badge/Python-3.11%2B-3776ab?style=for-the-badge&logo=python&logoColor=white)](https://python.org)
 [![License](https://img.shields.io/badge/License-MIT-a855f7?style=for-the-badge&logo=open-source-initiative&logoColor=white)](LICENSE)
-[![Platform](https://img.shields.io/badge/Platform-Linux%20%7C%20Termux-e2e8f0?style=for-the-badge&logo=linux&logoColor=black)](https://github.com/SHalimoosavi/sayanjali-osint)
+[![Platform](https://img.shields.io/badge/Platform-Linux%20%7C%20Termux%20%7C%20macOS%20%7C%20Windows-e2e8f0?style=for-the-badge&logo=linux&logoColor=black)](https://github.com/SHalimoosavi/sayanjali-osint)
 
 <br/>
 
@@ -19,7 +18,7 @@
 
 <br/>
 
-[📖 What's New](#-whats-new-in-v21-sentinel-intelligence) · [🚀 Install](#-installation) · [⚡ Usage](#-usage) · [🧠 Features](#-core-features) · [👤 Author](#-author--maintainer)
+[📖 What's New](#-whats-new-in-v21-sentinel-intelligence) · [🚀 Install](#-installation) · [⚡ Usage](#-usage--core-capabilities) · [🧠 Modules](#-threat-intelligence-modules) · [👤 Author](#-author--maintainer)
 
 </div>
 
@@ -33,7 +32,7 @@ Security analysts and investigators face a fragmented intelligence landscape. Wh
 VirusTotal → Manual Copy → Shodan → Manual Copy → AbuseIPDB → Manual Copy → Spreadsheet → Report
 ```
 
-**This is broken.** Investigators waste hours correlating data across 6–10 separate platforms, manually copy-pasting between tabs, and still miss cross-source correlations that only emerge when intelligence is unified — and even when they do gather everything, raw data without a reputation match or risk score doesn't tell them whether a target is actually dangerous.
+**This is broken.** Investigators waste hours correlating data across 6–10 separate platforms, manually copy-pasting between tabs, and still miss cross-source correlations that only emerge when intelligence is unified — and even after gathering everything, raw data without a reputation match or risk score doesn't tell them whether a target is actually dangerous.
 
 **SAYANJALI OSINT v2.1 Sentinel Intelligence solves this end-to-end:**
 
@@ -42,17 +41,17 @@ VirusTotal → Manual Copy → Shodan → Manual Copy → AbuseIPDB → Manual C
 | 6+ browser tabs | Single CLI command |
 | Manual correlation | Automated IOC Risk Engine |
 | Raw, unscored data | Reputation-matched threat verdicts |
-| No unified report | AI Executive Summary + PDF/HTML/JSON |
+| No unified report | CLI / JSON / HTML / PDF reporting |
 | Hours per investigation | Minutes per investigation |
 | Scattered IOC data | Built-in reputation database + cache layer |
 
 ---
 
-## 🛡️ What Is SAYANJALI OSINT?
+## 🛡️ Overview
 
-**SAYANJALI OSINT** is an enterprise-grade Open Source Intelligence platform built for cybersecurity professionals, SOC analysts, threat hunters, red/blue teams, penetration testers, digital investigators, and OSINT researchers.
+**SAYANJALI OSINT** is an enterprise-grade Open Source Intelligence platform designed to **collect, enrich, correlate, and analyze** intelligence from multiple public data sources.
 
-**v2.1 Sentinel Intelligence** is a stable release at **90% production readiness**, introducing a dedicated threat correlation layer on top of the v2.0 foundation — moving the platform from "data aggregator" to "automated threat verdict engine."
+The platform enables investigators, security analysts, SOC teams, cybersecurity consultants, and researchers to perform rapid intelligence gathering and threat assessment from a single interface — no more switching between a dozen browser tabs to build one picture of a target.
 
 ---
 
@@ -61,126 +60,136 @@ VirusTotal → Manual Copy → Shodan → Manual Copy → AbuseIPDB → Manual C
 ### Phase 17 Additions
 
 **🧮 IOC Risk Engine**
-Analyzes every extracted Indicator of Compromise and calculates a dynamic threat score, generating an automated verdict instead of leaving correlation to the analyst.
+Evaluates IOC count, VirusTotal results, AbuseIPDB scores, and threat intelligence matches to produce a **Risk Score**, **Risk Classification**, and **Threat Verdict** — automatically, with no manual correlation required.
 
 **🔗 Threat Feed Correlation Engine**
-Matches discovered indicators against internal reputation databases to identify known malicious infrastructure before you've even opened a second tab.
+Compares every discovered indicator against the internal reputation database, detecting malicious IPs, domains, emails, and URLs, and outputting a **Threat Score** and **Correlation Verdict**.
 
 **🧠 Sentinel Intelligence Layer**
-A new correlation layer that fuses signal across:
-```
-IOC Extraction  ×  Threat Reputation Data  ×  VirusTotal
-×  AbuseIPDB  ×  AlienVault OTX  ×  Shodan Intelligence
-```
+A new correlation layer fusing signal across IOC extraction, threat reputation data, VirusTotal, AbuseIPDB, AlienVault OTX, and Shodan intelligence into one verdict.
 
-**📋 Enhanced AI Executive Summary**
-Every investigation now produces:
-- Threat Verdicts
-- Risk Scores
-- Confidence Levels
-- Automated Investigation Findings
-- Threat Correlation Results
+**🌍 Geolocation Intelligence Expansion**
+Now supports forward geocoding (place name → coordinates), reverse geocoding (coordinates → place name), and nearby place discovery — directly from the CLI.
 
 **🗄️ Built-In Reputation Database**
-Ships with a local threat reputation store covering:
-- Malicious IP indicators
-- Malicious domains
-- Malicious emails
-- Malicious URLs
+Ships with a local threat reputation store covering malicious IP indicators, domains, emails, and URLs.
+
+**💻 Expanded Platform Support**
+Officially supports Linux, Termux (Android), macOS, and Windows, on Python 3.11+.
 
 ---
 
-## ⚙️ Core Features
+## ⚙️ Usage & Core Capabilities
 
-### Intelligence Collection
-```
-✓ IP Address Intelligence       ✓ Domain Intelligence
-✓ WHOIS Analysis                ✓ DNS Enumeration
-✓ ASN Intelligence               ✓ Reverse DNS Resolution
-✓ Geolocation Intelligence       ✓ Nearby Location Intelligence
-✓ Subdomain Enumeration
+### Domain Intelligence
+WHOIS lookup · DNS enumeration · ASN identification · subdomain discovery · reverse DNS analysis · geolocation mapping
+
+```bash
+python main.py -q google.com
 ```
 
-### Threat Intelligence
-| Integration | Capabilities |
+### IP Intelligence
+Geolocation · ASN analysis · reverse DNS · VirusTotal reputation · AbuseIPDB reputation · AlienVault OTX intelligence · Shodan intelligence
+
+```bash
+python main.py -q 8.8.8.8
+```
+
+### Geolocation Intelligence
+Forward geocoding, reverse geocoding, and nearby place discovery.
+
+```bash
+python main.py -q "Hyderabad, India"
+python main.py -q "17.3850,78.4867"
+```
+
+---
+
+## 🕵️ Threat Intelligence Modules
+
+| Integration | Provides |
 |---|---|
-| **VirusTotal** | Reputation scoring · malicious/suspicious detection counts |
-| **Shodan** | Open ports · service banners · OS fingerprinting |
-| **AbuseIPDB** | Abuse confidence score · historical reports · ISP data |
-| **AlienVault OTX** | Community pulses · indicator reputation · threat feeds |
-| **Reputation Correlation** | Cross-source threat reputation matching |
-| **IOC Risk Assessment Engine** | Dynamic scoring across all extracted indicators |
+| **VirusTotal** | Reputation analysis · malicious / suspicious / harmless detection counts |
+| **AbuseIPDB** | Abuse confidence score · historical abuse reports · ISP & domain information |
+| **AlienVault OTX** | Threat pulse correlation · reputation analysis · ASN data · country intelligence |
+| **Shodan** | Open ports · exposed services · organization information · host intelligence |
 
-### IOC Analysis
-```
-✓ IP Extraction          ✓ Domain Extraction
-✓ Email Extraction       ✓ URL Extraction
-✓ Automated IOC Classification
-✓ IOC Risk Scoring
-```
+### IOC Analysis Engine
+Automatically extracts IP addresses, domains, URLs, and email addresses, generating a consolidated IOC report.
 
-### Advanced Correlation
-```
-✓ Known Malicious IP Detection         ✓ Known Malicious Domain Detection
-✓ Known Malicious Email Detection      ✓ Known Malicious URL Detection
-✓ Threat Feed Correlation Engine       ✓ Reputation Database Matching
-```
+### IOC Risk Engine
+Evaluates IOC count, VirusTotal results, AbuseIPDB scores, and threat intelligence matches → outputs **Risk Score**, **Risk Classification**, **Threat Verdict**.
 
-### Intelligence Enrichment
-```
-✓ Email Intelligence Analysis     ✓ SPF Detection
-✓ DMARC Detection                  ✓ Username Intelligence
-✓ Multi-Platform Username Discovery (GitHub, GitLab, Reddit, DockerHub, HackerOne, Medium, Keybase)
-```
+### Threat Feed Correlation
+Compares indicators against the internal reputation database → detects malicious IPs, domains, emails, and URLs → outputs **Threat Score** and **Correlation Verdict**.
 
-### Reporting
-```
-┌──────────────────────────────────────────────────────────────────┐
-│  AI Executive Summary  │  Risk & Confidence Scoring  │  CLI Dashboard │
-│  JSON Reports          │  HTML Reports                │  PDF Reports   │
-└──────────────────────────────────────────────────────────────────┘
-```
+### Email Intelligence
+Email discovery · domain analysis · SPF detection · DMARC detection
 
-### Performance
-```
-✓ Local Cache System            ✓ Fast Intelligence Aggregation
-✓ Modular Architecture           ✓ Async Intelligence Collection
+### Username Intelligence
+Checks username presence across GitHub, GitLab, Reddit, DockerHub, Medium, HackerOne, and Keybase.
+
+---
+
+## 📊 Reporting
+
+| Format | Command |
+|---|---|
+| CLI Report | `python main.py -q google.com` |
+| JSON Report | `python main.py -q google.com -f json` |
+| HTML Report | `python main.py -q google.com -f html` |
+| PDF Report | `python main.py -q google.com -f pdf` |
+
+---
+
+## ⚡ Performance
+
+**Cache System** — local SQLite cache reduces repeated API calls and speeds up subsequent investigations of the same target.
+
+```bash
+python main.py --health           # System diagnostics
+python main.py --stats            # Cache statistics
+python main.py --cleanup-cache    # Clear expired cache entries
+python main.py --batch targets.txt  # Investigate multiple targets at once
 ```
 
 ---
 
 ## 📦 Installation
 
-### Prerequisites
+### System Requirements
 
-| Requirement | Version | Check |
-|---|---|---|
-| Python | 3.10+ | `python3 --version` |
-| pip | Latest | `pip --version` |
-| Git | Any | `git --version` |
+| Requirement | Version |
+|---|---|
+| Python | 3.11+ |
+| Platforms | Linux · Termux (Android) · macOS · Windows |
 
-### Linux / Kali / Ubuntu
+### Linux / macOS
 
 ```bash
-# Clone the repository
 git clone https://github.com/SHalimoosavi/sayanjali-osint.git
 cd sayanjali-osint
 
-# Install dependencies
 pip install -r requirements.txt
-
-# Run initial setup
 python main.py --setup
 ```
 
 ### Termux (Android)
 
 ```bash
-# Update Termux packages
 pkg update && pkg upgrade -y
 pkg install python git -y
 
-# Clone and install
+git clone https://github.com/SHalimoosavi/sayanjali-osint.git
+cd sayanjali-osint
+
+pip install -r requirements.txt
+python main.py --setup
+```
+
+### Windows (PowerShell)
+
+```powershell
 git clone https://github.com/SHalimoosavi/sayanjali-osint.git
 cd sayanjali-osint
 
@@ -190,64 +199,18 @@ python main.py --setup
 
 ### API Keys Configuration
 
-SAYANJALI OSINT integrates with threat intelligence APIs. After running `--setup`, add your keys to `config.py` — **not** to `.env` if that file is tracked in your repo (see ⚠️ note below):
+After running `--setup`, add your keys to `config.py`:
 
 ```python
-VIRUSTOTAL_API_KEY    = "your_key_here"   # Free tier: virustotal.com
-SHODAN_API_KEY        = "your_key_here"   # Free tier: shodan.io
-ABUSEIPDB_API_KEY     = "your_key_here"   # Free tier: abuseipdb.com
-OTX_API_KEY           = "your_key_here"   # Free tier: otx.alienvault.com
+VIRUSTOTAL_API_KEY = "your_key_here"   # Free tier: virustotal.com
+SHODAN_API_KEY      = "your_key_here"   # Free tier: shodan.io
+ABUSEIPDB_API_KEY   = "your_key_here"   # Free tier: abuseipdb.com
+OTX_API_KEY         = "your_key_here"   # Free tier: otx.alienvault.com
 ```
 
 > 💡 All four APIs have free tiers. The platform works with partial keys — more keys unlock richer correlation in the Sentinel Intelligence Layer.
 
-> ⚠️ **Security note:** your repository currently has a `.env` file committed at the root. If it contains real API keys, rotate them immediately and add `.env` to `.gitignore` going forward — committed secrets remain in git history even after deletion unless the history itself is rewritten.
-
----
-
-## 🚀 Usage
-
-```bash
-# Investigate a domain
-python main.py -q google.com
-
-# Investigate an IP address
-python main.py -q 8.8.8.8
-
-# Batch investigation (multiple targets from a file)
-python main.py --batch targets.txt
-
-# Export as JSON (for automation / SIEM integration)
-python main.py -q github.com -f json
-
-# Generate interactive HTML dashboard
-python main.py -q github.com -f html -o report.html
-
-# Generate executive PDF report (AI summary + risk score + verdict)
-python main.py -q github.com -f pdf
-
-# Run a system health check
-python main.py --health
-
-# View cache statistics
-python main.py --stats
-
-# Clear expired cache entries
-python main.py --cleanup-cache
-```
-
-### Reading a Sentinel Intelligence Result
-
-Every investigation under v2.1 now returns:
-
-```
-Target          → google.com
-Risk Score       → 4 / 100
-Threat Verdict   → BENIGN
-Confidence       → High
-Reputation Match → No match in malicious indicator database
-Findings         → AI-generated executive summary of the investigation
-```
+> ⚠️ **Security note:** if a `.env` file is tracked in this repository and contains real keys, rotate them immediately and add `.env` to `.gitignore` — deleting a tracked file does not remove it from git history.
 
 ---
 
@@ -263,10 +226,10 @@ sayanjali-osint/
 ├── processors/            ← IOC Risk Engine + Threat Correlation Engine
 ├── utils/                 ← Shared utilities & helpers
 │
-├── main.py                ← CLI entrypoint
-├── config.py               ← API keys & platform configuration
-├── validators.py           ← Input validation (IP, domain, URL, email)
-├── models.py               ← Pydantic data models
+├── main.py
+├── config.py
+├── validators.py
+├── models.py
 │
 ├── requirements.txt
 ├── VERSION
@@ -275,14 +238,15 @@ sayanjali-osint/
 
 ---
 
-## 📊 Current Release Status
+## 📈 Version Information
 
 | | |
 |---|---|
-| **Version** | v2.1.0 — Sentinel Intelligence |
+| **Product** | SAYANJALI OSINT |
+| **Release** | v2.1 — Sentinel Intelligence |
 | **Status** | Stable Release |
-| **Production Readiness** | 90% |
-| **Designed For** | Security Researchers · SOC Teams · Threat Hunters · Blue Teams · Red Teams · Cybersecurity Consultants · Digital Investigators · OSINT Analysts |
+| **Maintained By** | Syed Ali Hasan Moosavi |
+| **Organization** | SAYANJALI NEXUS PRIVATE LIMITED |
 
 ---
 
@@ -292,15 +256,9 @@ sayanjali-osint/
 git checkout -b feature/your-feature-name
 git commit -m "feat: describe your change"
 git push origin feature/your-feature-name
-# → Open a Pull Request
 ```
 
-**Welcome contribution areas:**
-- New API integrations (GreyNoise, SecurityTrails, Censys)
-- Expansion of the built-in reputation database
-- Additional output formatters
-- Performance improvements to the Sentinel Intelligence correlation layer
-- Termux compatibility patches
+Welcome contribution areas: new API integrations (GreyNoise, SecurityTrails, Censys), reputation database expansion, additional output formatters, Windows/macOS compatibility testing, Termux patches.
 
 ---
 
@@ -348,7 +306,7 @@ MIT License — Copyright (c) 2026 SAYANJALI NEXUS PRIVATE LIMITED. Full text: [
 
 <img src="https://capsule-render.vercel.app/api?type=waving&color=0:0f172a,50:1a1f2e,100:0d1117&height=100&section=footer" width="100%"/>
 
-**SAYANJALI OSINT v2.1.0 — Sentinel Intelligence**
+**SAYANJALI OSINT v2.1 — Sentinel Intelligence**
 
 *Intelligence. Visibility. Correlation.*
 
