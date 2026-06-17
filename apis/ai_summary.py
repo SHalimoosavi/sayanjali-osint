@@ -51,7 +51,7 @@ def generate_ai_summary(report: dict) -> dict:
         }
 
     # =====================================
-    # THREAT INVESTIGATIONS
+    # THREAT INVESTIGATION
     # =====================================
 
     risk_score = 50
@@ -62,6 +62,7 @@ def generate_ai_summary(report: dict) -> dict:
     abuse = report.get("abuseipdb", {})
     otx = report.get("otx", {})
     shodan = report.get("shodan", {})
+    threat_feed = report.get("threat_feed", {})
 
     registrar = str(
         whois.get(
@@ -95,6 +96,10 @@ def generate_ai_summary(report: dict) -> dict:
         "cloudflare"
     ]
 
+    # =====================================
+    # TRUSTED ORGANIZATION
+    # =====================================
+
     for company in trusted_orgs:
 
         if company in organization:
@@ -107,6 +112,10 @@ def generate_ai_summary(report: dict) -> dict:
 
             break
 
+    # =====================================
+    # TRUSTED REGISTRAR
+    # =====================================
+
     for reg in trusted_registrars:
 
         if reg in registrar:
@@ -118,6 +127,10 @@ def generate_ai_summary(report: dict) -> dict:
             )
 
             break
+
+    # =====================================
+    # DNS ANALYSIS
+    # =====================================
 
     dns_records = report.get(
         "dns_records",
@@ -284,6 +297,54 @@ def generate_ai_summary(report: dict) -> dict:
                 f"Multiple exposed services ({port_count} ports)"
             )
 
+    # =====================================
+    # THREAT FEED CORRELATION
+    # =====================================
+
+    threat_score = threat_feed.get(
+        "threat_score",
+        0
+    )
+
+    if threat_score > 0:
+
+        risk_score += min(
+            threat_score,
+            40
+        )
+
+        findings.append(
+            f"Threat feed score {threat_score}"
+        )
+
+    if threat_feed.get("malicious_ips"):
+
+        findings.append(
+            "Known malicious IP detected"
+        )
+
+    if threat_feed.get("malicious_domains"):
+
+        findings.append(
+            "Known malicious domain detected"
+        )
+
+    if threat_feed.get("malicious_emails"):
+
+        findings.append(
+            "Known malicious email detected"
+        )
+
+    if threat_feed.get("malicious_urls"):
+
+        findings.append(
+            "Known malicious URL detected"
+        )
+
+    # =====================================
+    # NORMALIZE
+    # =====================================
+
     risk_score = max(
         0,
         min(
@@ -291,6 +352,10 @@ def generate_ai_summary(report: dict) -> dict:
             risk_score
         )
     )
+
+    # =====================================
+    # VERDICT
+    # =====================================
 
     if risk_score <= 20:
 

@@ -22,14 +22,13 @@ def format_cli(report: dict):
     )
 
     # ==================================================
-    # CACHE STATUS
+    # CACHE
     # ==================================================
 
     if report.get("cache_status"):
-
         console.print(
             Panel(
-                f"[bold]Cache Status:[/bold] {report.get('cache_status')}",
+                f"Cache Status: {report.get('cache_status')}",
                 title="Cache",
                 border_style="blue",
                 expand=False
@@ -50,9 +49,9 @@ def format_cli(report: dict):
 
         console.print(
             Panel(
-                f"[bold]Risk Score:[/bold] {ai.get('risk_score')}\n"
-                f"[bold]Verdict:[/bold] {ai.get('verdict')}\n"
-                f"[bold]Confidence:[/bold] {ai.get('confidence', 'N/A')}\n\n"
+                f"Risk Score: {ai.get('risk_score')}\n"
+                f"Verdict: {ai.get('verdict')}\n"
+                f"Confidence: {ai.get('confidence')}\n\n"
                 f"{findings}",
                 title="Executive Summary",
                 border_style="green"
@@ -60,26 +59,91 @@ def format_cli(report: dict):
         )
 
     # ==================================================
-    # DOMAIN INFO
+    # IOC RISK
     # ==================================================
 
-    if report.get("domain_info"):
+    if report.get("ioc_risk"):
 
-        domain = report["domain_info"]
+        ioc = report["ioc_risk"]
 
-        table = Table(title="Domain Information")
+        table = Table(title="IOC Risk Assessment")
 
         table.add_column("Field")
         table.add_column("Value")
 
         table.add_row(
-            "Domain",
-            str(domain.get("domain"))
+            "IOC Count",
+            str(ioc.get("ioc_count"))
         )
 
         table.add_row(
-            "Primary IP",
-            str(domain.get("primary_ip"))
+            "Suspicious IPs",
+            str(ioc.get("suspicious_ips"))
+        )
+
+        table.add_row(
+            "Suspicious Domains",
+            str(ioc.get("suspicious_domains"))
+        )
+
+        table.add_row(
+            "Suspicious Emails",
+            str(ioc.get("suspicious_emails"))
+        )
+
+        table.add_row(
+            "Risk Score",
+            str(ioc.get("risk_score"))
+        )
+
+        table.add_row(
+            "Verdict",
+            str(ioc.get("verdict"))
+        )
+
+        console.print(table)
+
+    # ==================================================
+    # THREAT FEED
+    # ==================================================
+
+    if report.get("threat_feed"):
+
+        threat = report["threat_feed"]
+
+        table = Table(title="Threat Feed Correlation")
+
+        table.add_column("Field")
+        table.add_column("Value")
+
+        table.add_row(
+            "Malicious IPs",
+            str(len(threat.get("malicious_ips", [])))
+        )
+
+        table.add_row(
+            "Malicious Domains",
+            str(len(threat.get("malicious_domains", [])))
+        )
+
+        table.add_row(
+            "Malicious Emails",
+            str(len(threat.get("malicious_emails", [])))
+        )
+
+        table.add_row(
+            "Malicious URLs",
+            str(len(threat.get("malicious_urls", [])))
+        )
+
+        table.add_row(
+            "Threat Score",
+            str(threat.get("threat_score"))
+        )
+
+        table.add_row(
+            "Verdict",
+            str(threat.get("verdict"))
         )
 
         console.print(table)
@@ -97,25 +161,10 @@ def format_cli(report: dict):
         table.add_column("Field")
         table.add_column("Value")
 
-        table.add_row(
-            "ASN",
-            str(asn.get("asn"))
-        )
-
-        table.add_row(
-            "Organization",
-            str(asn.get("organization"))
-        )
-
-        table.add_row(
-            "Network",
-            str(asn.get("network"))
-        )
-
-        table.add_row(
-            "Country",
-            str(asn.get("country"))
-        )
+        table.add_row("ASN", str(asn.get("asn")))
+        table.add_row("Organization", str(asn.get("organization")))
+        table.add_row("Network", str(asn.get("network")))
+        table.add_row("Country", str(asn.get("country")))
 
         console.print(table)
 
@@ -132,38 +181,12 @@ def format_cli(report: dict):
         table.add_column("Field")
         table.add_column("Value")
 
-        table.add_row(
-            "Organization",
-            str(shodan.get("organization"))
-        )
-
-        table.add_row(
-            "Country",
-            str(shodan.get("country"))
-        )
-
-        table.add_row(
-            "Operating System",
-            str(shodan.get("os"))
-        )
-
-        table.add_row(
-            "Hostnames",
-            ", ".join(
-                shodan.get("hostnames", [])
-            )
-        )
-
+        table.add_row("Organization", str(shodan.get("organization")))
+        table.add_row("Country", str(shodan.get("country")))
+        table.add_row("OS", str(shodan.get("os")))
         table.add_row(
             "Ports",
-            ", ".join(
-                map(str, shodan.get("ports", []))
-            )
-        )
-
-        table.add_row(
-            "Last Update",
-            str(shodan.get("last_update"))
+            ", ".join(map(str, shodan.get("ports", [])))
         )
 
         console.print(table)
@@ -181,30 +204,10 @@ def format_cli(report: dict):
         table.add_column("Field")
         table.add_column("Value")
 
-        table.add_row(
-            "Reputation",
-            str(vt.get("reputation"))
-        )
-
-        table.add_row(
-            "Harmless",
-            str(vt.get("harmless"))
-        )
-
-        table.add_row(
-            "Malicious",
-            str(vt.get("malicious"))
-        )
-
-        table.add_row(
-            "Suspicious",
-            str(vt.get("suspicious"))
-        )
-
-        table.add_row(
-            "Undetected",
-            str(vt.get("undetected"))
-        )
+        table.add_row("Reputation", str(vt.get("reputation")))
+        table.add_row("Malicious", str(vt.get("malicious")))
+        table.add_row("Suspicious", str(vt.get("suspicious")))
+        table.add_row("Harmless", str(vt.get("harmless")))
 
         console.print(table)
 
@@ -227,28 +230,13 @@ def format_cli(report: dict):
         )
 
         table.add_row(
-            "ISP",
-            str(abuse.get("isp"))
-        )
-
-        table.add_row(
-            "Domain",
-            str(abuse.get("domain"))
-        )
-
-        table.add_row(
-            "Usage Type",
-            str(abuse.get("usage_type"))
-        )
-
-        table.add_row(
-            "Total Reports",
+            "Reports",
             str(abuse.get("total_reports"))
         )
 
         table.add_row(
-            "Last Reported",
-            str(abuse.get("last_reported"))
+            "ISP",
+            str(abuse.get("isp"))
         )
 
         console.print(table)
@@ -267,13 +255,8 @@ def format_cli(report: dict):
         table.add_column("Value")
 
         table.add_row(
-            "Indicator",
-            str(otx.get("indicator"))
-        )
-
-        table.add_row(
-            "Type",
-            str(otx.get("indicator_type"))
+            "Pulse Count",
+            str(otx.get("pulse_count"))
         )
 
         table.add_row(
@@ -282,18 +265,8 @@ def format_cli(report: dict):
         )
 
         table.add_row(
-            "Pulse Count",
-            str(otx.get("pulse_count"))
-        )
-
-        table.add_row(
             "ASN",
             str(otx.get("asn"))
-        )
-
-        table.add_row(
-            "Country",
-            str(otx.get("country"))
         )
 
         console.print(table)
