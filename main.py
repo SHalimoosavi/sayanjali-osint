@@ -43,6 +43,11 @@ console = Console()
     help="Radius in meters"
 )
 @click.option(
+    "--deep",
+    is_flag=True,
+    help="Enable Deep Scan Intelligence"
+)
+@click.option(
     "-f",
     "--format",
     "out_format",
@@ -91,6 +96,7 @@ def main(
     q_type,
     nearby,
     radius,
+    deep, 
     out_format,
     output,
     setup,
@@ -389,7 +395,8 @@ def main(
         run_investigation(
             query,
             nearby,
-            radius
+            radius,
+            deep
         )
     )
 
