@@ -2,54 +2,99 @@ import requests
 
 
 def enumerate_subdomains(domain: str) -> dict:
+    """
+    Fast subdomain enumeration.
 
-    results = set()
+    Phase 17 Optimization:
+    - Reduced timeout
+    - Limits crt.sh response size
+    - Gracefully handles failures
+    - Prevents slow scans from blocking investigations
+    """
 
     try:
-
-        url = (
-            "https://crt.sh/"
-            f"?q=%.{domain}&output=json"
-        )
+        url = f"https://crt.sh/?q=%.{domain}&output=json"
 
         response = requests.get(
             url,
-            timeout=30
+            timeout=5
         )
 
-        if response.status_code == 200:
+        if response.status_code != 200:
+            return {
+                "count": 0,
+                "results": [],
+                "source": "crt.sh",
+                "status": f"HTTP {response.status_code}"
+            }
 
-            try:
+        try:
+            data = response.json()
 
-                data = response.json()
+        except Exception:
+            return {
+                "count": 0,
+                "results": [],
+                "source": "crt.sh",
+                "status": "invalid_json"
+            }
 
-                for item in data:
+        if not isinstance(data, list):
+            return {
+                "count": 0,
+                "results": [],
+                "source": "crt.sh",
+                "status": "unexpected_response"
+            }
 
-                    name = item.get(
-                        "name_value",
-                        ""
-                    )
+        results = set()
 
-                    for sub in name.split("\n"):
+        # Limit processing for performance
+        for item in data[:200]:
 
-                        sub = sub.strip().lower()
+            name_value = str(
+                item.get(
+                    "name_value",
+                    ""
+                )
+            )
 
-                        if (
-                            sub
-                            and "*." not in sub
-                            and domain in sub
-                        ):
-                            results.add(sub)
+            for subdomain in name_value.split("\n"):
 
-            except Exception:
-                pass
+                subdomain = (
+                    subdomain
+                    .strip()
+                    .lower()
+                )
 
-    except Exception:
-        pass
+                if (
+                    subdomain
+                    and not subdomain.startswith("*.")
+                    and subdomain.endswith(domain.lower())
+                ):
+                    results.add(subdomain)
 
-    return {
-        "count": len(results),
-        "results": sorted(
-            list(results)
-        )
-    }
+        return {
+            "count": len(results),
+            "results": sorted(results),
+            "source": "crt.sh",
+            "status": "success"
+        }
+
+    except requests.exceptions.Timeout:
+
+        return {
+            "count": 0,
+            "results": [],
+            "source": "crt.sh",
+            "status": "timeout"
+        }
+
+    except Exception as e:
+
+        return {
+            "count": 0,
+            "results": [],
+            "source": "crt.sh",
+            "status": f"error: {str(e)}"
+        }

@@ -1,0 +1,273 @@
+{
+  "query": "google.com",
+  "query_type": "domain",
+  "timestamp": "2026-06-19T02:35:01.174620",
+  "sources_queried": [
+    "whois",
+    "dns",
+    "subdomain_enum",
+    "reverse_dns",
+    "asn_lookup",
+    "virustotal",
+    "shodan",
+    "abuseipdb",
+    "otx",
+    "ip_geolocation",
+    "email_intelligence",
+    "username_intelligence",
+    "ioc_risk",
+    "threat_feed"
+  ],
+  "errors": [],
+  "domain_info": {
+    "domain": "google.com",
+    "primary_ip": "142.251.43.142",
+    "all_ips": [
+      "142.251.43.142"
+    ]
+  },
+  "whois": {
+    "domain": "google.com",
+    "registrar": "MarkMonitor, Inc.",
+    "creation_date": "1997-09-15",
+    "expiration_date": "2028-09-14",
+    "updated_date": "2019-09-09",
+    "name_servers": [
+      "NS1.GOOGLE.COM",
+      "NS2.GOOGLE.COM",
+      "NS3.GOOGLE.COM",
+      "NS4.GOOGLE.COM"
+    ],
+    "status": [
+      "clientDeleteProhibited https://icann.org/epp#clientDeleteProhibited",
+      "clientTransferProhibited https://icann.org/epp#clientTransferProhibited",
+      "clientUpdateProhibited https://icann.org/epp#clientUpdateProhibited",
+      "serverDeleteProhibited https://icann.org/epp#serverDeleteProhibited",
+      "serverTransferProhibited https://icann.org/epp#serverTransferProhibited",
+      "serverUpdateProhibited https://icann.org/epp#serverUpdateProhibited",
+      "clientUpdateProhibited (https://www.icann.org/epp#clientUpdateProhibited)",
+      "clientTransferProhibited (https://www.icann.org/epp#clientTransferProhibited)",
+      "clientDeleteProhibited (https://www.icann.org/epp#clientDeleteProhibited)",
+      "serverUpdateProhibited (https://www.icann.org/epp#serverUpdateProhibited)",
+      "serverTransferProhibited (https://www.icann.org/epp#serverTransferProhibited)",
+      "serverDeleteProhibited (https://www.icann.org/epp#serverDeleteProhibited)"
+    ]
+  },
+  "dns_records": {
+    "A": [
+      "142.251.223.14"
+    ],
+    "AAAA": [
+      "2404:6800:4007:834::200e"
+    ],
+    "MX": [
+      "10 smtp.google.com."
+    ],
+    "TXT": [
+      "\"docusign=1b0a6754-49b1-4db5-8540-d2c12664b289\"",
+      "\"docusign=05958488-4752-4ef2-95eb-aa7ba8a3bd0e\"",
+      "\"facebook-domain-verification=22rm551cu4k0ab0bxsw536tlds4h95\"",
+      "\"onetrust-domain-verification=6d685f1d41a94696ad7ef771f68993e0\"",
+      "\"MS=E4A68B9AB2BB9670BCE15412F62916164C0B20BB\"",
+      "\"google-site-verification=TV9-DBe4R80X4v0M4U_bd_J9cpOJM0nikft0jAgjmsQ\"",
+      "\"apple-domain-verification=30afIBcvSuDV2PLX\"",
+      "\"globalsign-smime-dv=CDYX+XFHUw2wml6/Gb8+59BsH31KzUr6c1l2BPvqKX8=\"",
+      "\"google-site-verification=4ibFUgB-wXLQ_S7vsXVomSTVamuOXBiVAzpR5IZ87D0\"",
+      "\"google-site-verification=wD8N7i1JTNTkezJ49swvWW48f8_9xveREV4oB-0Hf5o\"",
+      "\"v=spf1 include:_spf.google.com ~all\"",
+      "\"onetrust-domain-verification=0d477fe608074e6f9c12bca7826035cc\"",
+      "\"cisco-ci-domain-verification=47c38bc8c4b74b7233e9053220c1bbe76bcc1cd33c7acf7acd36cd6a5332004b\""
+    ],
+    "NS": [
+      "ns1.google.com.",
+      "ns3.google.com.",
+      "ns2.google.com.",
+      "ns4.google.com."
+    ],
+    "errors": []
+  },
+  "subdomains": {
+    "count": 0,
+    "results": [],
+    "source": "crt.sh",
+    "status": "HTTP 404"
+  },
+  "reverse_dns": {
+    "hostname": "lcmaaa-aq-in-f14.1e100.net",
+    "aliases": [
+      "bkk03s01-in-f14.1e100.net"
+    ],
+    "addresses": [
+      "142.251.43.142"
+    ]
+  },
+  "asn_info": {
+    "asn": "AS15169",
+    "organization": "Google LLC",
+    "network": "142.251.43.0/24",
+    "country": "Taiwan"
+  },
+  "virustotal": {
+    "reputation": 707,
+    "harmless": 63,
+    "malicious": 0,
+    "suspicious": 0,
+    "undetected": 28
+  },
+  "shodan": {
+    "error": "Access denied (403 Forbidden)"
+  },
+  "abuseipdb": {
+    "ip": "142.251.43.142",
+    "abuse_score": 0,
+    "country": "US",
+    "isp": "Google LLC",
+    "domain": "google.com",
+    "usage_type": "Data Center/Web Hosting/Transit",
+    "total_reports": 0,
+    "last_reported": "2025-05-14T18:30:20+00:00"
+  },
+  "otx": {
+    "indicator": "google.com",
+    "indicator_type": "domain",
+    "reputation": 0,
+    "pulse_count": 0,
+    "country": null,
+    "asn": null,
+    "city": null
+  },
+  "ip_geolocation": {
+    "ip": "142.251.43.142",
+    "country": "Thailand",
+    "country_code": "TH",
+    "city": "Bangkok",
+    "latitude": 13.7563,
+    "longitude": 100.502,
+    "isp": "Google LLC",
+    "confidence": 0.8,
+    "region": "Bangkok",
+    "timezone": "Asia/Bangkok"
+  },
+  "latitude": 13.7563,
+  "longitude": 100.502,
+  "ioc_summary": {
+    "ips": [
+      "142.251.223.14",
+      "142.251.43.0",
+      "142.251.43.142"
+    ],
+    "domains": [
+      "NS1.GOOGLE.COM",
+      "NS2.GOOGLE.COM",
+      "NS3.GOOGLE.COM",
+      "NS4.GOOGLE.COM",
+      "bkk03s01-in-f14.1e100.net",
+      "crt.sh",
+      "google.com",
+      "icann.org",
+      "lcmaaa-aq-in-f14.1e100.net",
+      "ns1.google.com",
+      "ns2.google.com",
+      "ns3.google.com",
+      "ns4.google.com",
+      "smtp.google.com",
+      "www.icann.org"
+    ],
+    "emails": [],
+    "urls": [
+      "https://icann.org/epp#clientDeleteProhibited',",
+      "https://icann.org/epp#clientTransferProhibited',",
+      "https://icann.org/epp#clientUpdateProhibited',",
+      "https://icann.org/epp#serverDeleteProhibited',",
+      "https://icann.org/epp#serverTransferProhibited',",
+      "https://icann.org/epp#serverUpdateProhibited',",
+      "https://www.icann.org/epp#clientDeleteProhibited)',",
+      "https://www.icann.org/epp#clientTransferProhibited)',",
+      "https://www.icann.org/epp#clientUpdateProhibited)',",
+      "https://www.icann.org/epp#serverDeleteProhibited)']}",
+      "https://www.icann.org/epp#serverTransferProhibited)',",
+      "https://www.icann.org/epp#serverUpdateProhibited)',"
+    ]
+  },
+  "email_intelligence": {
+    "emails_found": 0,
+    "emails": [],
+    "email_domains": [],
+    "spf_detected": true,
+    "dmarc_detected": false
+  },
+  "username_intelligence": {
+    "username": "google",
+    "platforms_found": 5,
+    "confidence": 71.43,
+    "results": {
+      "GitHub": {
+        "exists": true,
+        "url": "https://github.com/google",
+        "status_code": 200
+      },
+      "GitLab": {
+        "exists": true,
+        "url": "https://gitlab.com/google",
+        "status_code": 200
+      },
+      "Reddit": {
+        "exists": true,
+        "url": "https://www.reddit.com/user/google",
+        "status_code": 200
+      },
+      "Keybase": {
+        "exists": false,
+        "url": "https://keybase.io/google",
+        "status_code": 404
+      },
+      "DockerHub": {
+        "exists": true,
+        "url": "https://hub.docker.com/u/google",
+        "status_code": 200
+      },
+      "Medium": {
+        "exists": false,
+        "url": "https://medium.com/@google",
+        "status_code": 403
+      },
+      "HackerOne": {
+        "exists": true,
+        "url": "https://hackerone.com/google",
+        "status_code": 200
+      }
+    }
+  },
+  "ioc_risk": {
+    "ioc_count": 30,
+    "suspicious_ips": 0,
+    "suspicious_domains": 0,
+    "suspicious_emails": 0,
+    "risk_score": 20,
+    "verdict": "Low Risk"
+  },
+  "threat_feed": {
+    "malicious_ips": [],
+    "malicious_domains": [],
+    "malicious_emails": [],
+    "malicious_urls": [],
+    "threat_score": 0,
+    "verdict": "Low Risk"
+  },
+  "ai_summary": {
+    "risk_score": 0,
+    "verdict": "Low Risk",
+    "confidence": 80,
+    "findings": [
+      "Trusted organization detected: google llc",
+      "Trusted registrar detected: markmonitor, inc.",
+      "Email infrastructure detected",
+      "Name servers configured",
+      "High VirusTotal reputation",
+      "No AbuseIPDB abuse confidence"
+    ]
+  },
+  "processing_time_seconds": 8.83,
+  "confidence_score": 0.8,
+  "cache_status": "HIT"
+}
